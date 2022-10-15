@@ -4,6 +4,7 @@ import { Canvas } from "@react-three/fiber";
 import "./styles/game.css";
 import Diglett from "./components/Diglett";
 import Hammer from "./components/Toy_hammer";
+import Diglett2 from "./components/Diglett";
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import Grass from "./components/Grass";
 
@@ -18,8 +19,9 @@ export default function Game() {
         <spotLight position={[10, 15, 10]} angle={0.3} />
 
         <Hammer position={[0,0,0]} scale={[1,1,1]}/>        
-        <Diglett position={[0, -1, 0]} scale={[5, 5, 5]} />
-        <Grass position={[0, -1.5, 0]} />
+        <Diglett position={[-3, -1, 0]} scale={[5, 5, 5]} />
+        <Diglett2 position={[3, -1, 0]} scale={[5, 5, 5]} />
+        <Grass position={[0, -1, 0]} />
       </Canvas>
     </div>
   );
