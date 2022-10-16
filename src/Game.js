@@ -1,5 +1,6 @@
 import React from "react";
 import { Canvas } from "@react-three/fiber";
+import styled from "styled-components";
 
 import "./styles/game.css";
 import Diglett from "./components/Diglett";
@@ -11,6 +12,7 @@ export default function Game() {
   return (
     <div id="game">
       <div> 게임 화면 </div>
+      
       <Canvas>
         <OrbitControls />
         <ambientLight intensity={0.5} />
@@ -23,3 +25,4 @@ export default function Game() {
     </div>
   );
 }
+
