@@ -16,7 +16,7 @@ import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import Grass from "./components/Grass";
 
 export default function Game() {
-  
+
   return (
     <div id="game">
       <div> 게임 화면 </div>
@@ -27,15 +27,15 @@ export default function Game() {
         <spotLight position={[10, 15, 10]} angle={0.3} />
         <Suspense fallback={null}>
           {/* <Hammer position={[0,0,0]} scale={[1,1,1]}/>         */}
-          <Diglett position={[0, 0, 0]} scale={[5, 5, 5]} />
-          <Diglett2 position={[6, 0, 0]} scale={[5, 5, 5]} />
-          <Diglett3 position={[-6, 0, 0]} scale={[5, 5, 5]} />
-          <Diglett4 position={[0, 0, 6]} scale={[5, 5, 5]} />
-          <Diglett5 position={[-6, 0, 6]} scale={[5, 5, 5]} />
-          <Diglett6 position={[6, 0, 6]} scale={[5, 5, 5]} />
-          <Diglett7 position={[6, 0, -6]} scale={[5, 5, 5]} />
-          <Diglett8 position={[0, 0, -6]} scale={[5, 5, 5]} />
-          <Diglett9 position={[-6, 0, -6]} scale={[5, 5, 5]} />
+          <Diglett position={[0, -3, 0]} scale={[5, 5, 5]} />
+          <Diglett2 position={[6, -3, 0]} scale={[5, 5, 5]} />
+          <Diglett3 position={[-6, -3, 0]} scale={[5, 5, 5]} />
+          <Diglett4 position={[0, -3, 6]} scale={[5, 5, 5]} />
+          <Diglett5 position={[-6, -3, 6]} scale={[5, 5, 5]} />
+          <Diglett6 position={[6, -3, 6]} scale={[5, 5, 5]} />
+          <Diglett7 position={[6, -3, -6]} scale={[5, 5, 5]} />
+          <Diglett8 position={[0, -3, -6]} scale={[5, 5, 5]} />
+          <Diglett9 position={[-6, -3, -6]} scale={[5, 5, 5]} />
           <Grass position={[0, -1, 0]} scale ={[5,5,5]}/>
         </Suspense>
 
