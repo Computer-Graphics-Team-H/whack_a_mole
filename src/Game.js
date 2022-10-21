@@ -2,7 +2,7 @@ import React, { Suspense, useRef, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import "./styles/game.css";
 import Diglett from "./components/Diglett";
-import Hammer from "./components/Toy_hammer";
+
 import Hammer2 from "./components/Cartoon_hammer";
 import Hole from "./components/Hole";
 import Diglett2 from "./components/Diglett copy";
