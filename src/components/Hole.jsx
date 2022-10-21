@@ -10,10 +10,10 @@ import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 
 export default function Model(props) {
-  const { nodes, materials } = useGLTF('/hole.glb')
+  const { nodes, materials } = useGLTF('model/hole.glb')
   return (
     <group {...props} dispose={null}>
-      <group rotation={[-Math.PI / 2, 0, 0]} scale={0.1}>
+      <group rotation={[-Math.PI / 2+0.11, 0, 0]} scale={0.1}>
         <mesh geometry={nodes.Object_2.geometry} material={materials.lambert3SG} />
         <mesh geometry={nodes.Object_3.geometry} material={materials.lambert3SG} />
         <mesh geometry={nodes.Object_4.geometry} material={materials.lambert3SG} />
@@ -30,4 +30,4 @@ export default function Model(props) {
   )
 }
 
-useGLTF.preload('/hole.glb')
+useGLTF.preload('model/hole.glb')

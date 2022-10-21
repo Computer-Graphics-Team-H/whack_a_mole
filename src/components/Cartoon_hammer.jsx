@@ -10,7 +10,7 @@ import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 
 export default function Model(props) {
-  const { nodes, materials } = useGLTF('/cartoon_hammer.glb')
+  const { nodes, materials } = useGLTF('model/cartoon_hammer.glb')
   return (
     <group {...props} dispose={null}>
       <group rotation={[-Math.PI / 2, 0, 0]}>
@@ -26,4 +26,4 @@ export default function Model(props) {
   )
 }
 
-useGLTF.preload('/cartoon_hammer.glb')
+useGLTF.preload('model/cartoon_hammer.glb')
