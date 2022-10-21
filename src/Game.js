@@ -17,31 +17,36 @@ import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import Grass from "./components/Grass";
 
 export default function Game() {
-  const useMousePosition = () => {
-    const [
-      mousePosition,
-      setMousePosition
-    ] = React.useState({ x: null, y: null });
-  
-    React.useEffect(() => {
-      const updateMousePosition = ev => {
-        setMousePosition({ x: ev.clientX, y: ev.clientY });
-      };
-      
-      window.addEventListener('mousemove', updateMousePosition);
-  
-      return () => {
-        window.removeEventListener('mousemove', updateMousePosition);
-      };
-    }, []);
-  
-    return mousePosition;
+  const [coords, setCoords] = useState({x: 0, y: 0});
+
+  const [globalCoords, setGlobalCoords] = useState({x: 0, y: 0});
+
+  useEffect(() => {
+    // 👇️ get global mouse coordinates
+    const handleWindowMouseMove = event => {
+      setGlobalCoords({
+        x: event.screenX,
+        y: event.screenY,
+      });
+    };
+    window.addEventListener('mousemove', handleWindowMouseMove);
+
+    return () => {
+      window.removeEventListener('mousemove', handleWindowMouseMove);
+    };
+  }, []);
+
+  const handleMouseMove = event => {
+    setCoords({
+      x: event.clientX - event.target.offsetLeft,
+      y: event.clientY - event.target.offsetTop,
+    });
   };
-  const mousePosition = useMousePosition()
+
   return (
     <div id="game">
       <div> 게임 화면 </div>
-      <Canvas onMouseMove={mousePosition}>
+      <Canvas>
         <OrbitControls />
         <PerspectiveCamera makeDefault fov={90} position={[0, 4, 10]} />
         <ambientLight intensity={0.5} />
@@ -63,7 +68,8 @@ export default function Game() {
 
       </Canvas>
       <h2>
-       {JSON.stringify(mousePosition)}
+        
+        Global coords: {globalCoords.x} {globalCoords.y}
       </h2>
     </div>
   );
