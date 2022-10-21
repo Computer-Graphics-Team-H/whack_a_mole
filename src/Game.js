@@ -24,7 +24,7 @@ export default function Game() {
         <OrbitControls />
         <PerspectiveCamera makeDefault fov={90} position={[0, 4, 10]} />
         <ambientLight intensity={0.5} />
-        <spotLight position={[10, 15, 10]} angle={0.3} />
+        <spotLight position={[20, 20, 20]} angle={0.3} />
         <Suspense fallback={null}>
           {/* <Hammer position={[0,0,0]} scale={[1,1,1]}/>         */}
           <Diglett position={[0, -3, 0]} scale={[5, 5, 5]} />
