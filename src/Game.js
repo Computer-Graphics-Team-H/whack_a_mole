@@ -1,9 +1,10 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useRef, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import "./styles/game.css";
 import Diglett from "./components/Diglett";
 import Hammer from "./components/Toy_hammer";
 import Hammer2 from "./components/Cartoon_hammer";
+import Hole from "./components/Hole";
 import Diglett2 from "./components/Diglett copy";
 import Diglett3 from "./components/Diglett copy 2";
 import Diglett4 from "./components/Diglett copy 3";
@@ -16,11 +17,31 @@ import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import Grass from "./components/Grass";
 
 export default function Game() {
-
+  const useMousePosition = () => {
+    const [
+      mousePosition,
+      setMousePosition
+    ] = React.useState({ x: null, y: null });
+  
+    React.useEffect(() => {
+      const updateMousePosition = ev => {
+        setMousePosition({ x: ev.clientX, y: ev.clientY });
+      };
+      
+      window.addEventListener('mousemove', updateMousePosition);
+  
+      return () => {
+        window.removeEventListener('mousemove', updateMousePosition);
+      };
+    }, []);
+  
+    return mousePosition;
+  };
+  const mousePosition = useMousePosition()
   return (
     <div id="game">
       <div> 게임 화면 </div>
-      <Canvas>
+      <Canvas onMouseMove={mousePosition}>
         <OrbitControls />
         <PerspectiveCamera makeDefault fov={90} position={[0, 4, 10]} />
         <ambientLight intensity={0.5} />
@@ -37,9 +58,13 @@ export default function Game() {
           <Diglett8 position={[0, -3, -6]} scale={[5, 5, 5]} />
           <Diglett9 position={[-6, -3, -6]} scale={[5, 5, 5]} />
           <Grass position={[0, -1, 0]} scale ={[5,5,5]}/>
+          {/* <Hole/> */}
         </Suspense>
 
       </Canvas>
+      <h2>
+       {JSON.stringify(mousePosition)}
+      </h2>
     </div>
   );
 }
