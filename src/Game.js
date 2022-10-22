@@ -53,7 +53,7 @@ export default function Game() {
           <Hole position={[6, 0, 6]} scale ={[3,3,3]}/>
           <Hole position={[-6, 0, 6]} scale ={[3,3,3]}/>
           <Hole position={[0, -0.5, -6]} scale ={[3,3,3]}/>
-          <Hole position={[6, -0.5 -6]} scale ={[3,3,3]}/>
+          <Hole position={[6, -0.5 ,-6]} scale ={[3,3,3]}/>
           <Hole position={[-6, -0.5, -6]} scale ={[3,3,3]}/>
         </Suspense>
 
