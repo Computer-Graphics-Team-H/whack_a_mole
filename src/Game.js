@@ -1,8 +1,7 @@
 import React, { Suspense, useRef, useEffect, useState } from "react";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
 import "./styles/game.css";
 import Diglett from "./components/Diglett";
-
 import Hammer2 from "./components/Cartoon_hammer";
 import Hole from "./components/Hole";
 import Diglett2 from "./components/Diglett copy";
@@ -16,7 +15,7 @@ import Diglett9 from "./components/Diglett copy 8";
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import Grass from "./components/Grass";
 
-export default function Game() {
+const Game = () =>{
   const [coords, setCoords] = useState({x: 0, y: 0});
 
   const handleMouseMove = event => {
@@ -25,7 +24,8 @@ export default function Game() {
       y: event.clientY - event.target.offsetTop,
     });
   };
-
+  
+  const [upKeyPressed, setUpKeyPressed] = useState(false);
   return (
     <div id="game">
       <div> 게임 화면 </div>
@@ -49,9 +49,11 @@ export default function Game() {
           <Hole position={[0, 0, 0]} scale ={[3,3,3]}/>
           <Hole position={[6, 0, 0]} scale ={[3,3,3]}/>
           <Hole position={[-6, 0, 0]} scale ={[3,3,3]}/>
+
           <Hole position={[0, 0, 6]} scale ={[3,3,3]}/>
           <Hole position={[6, 0, 6]} scale ={[3,3,3]}/>
           <Hole position={[-6, 0, 6]} scale ={[3,3,3]}/>
+
           <Hole position={[0, -0.5, -6]} scale ={[3,3,3]}/>
           <Hole position={[6, -0.5 -6]} scale ={[3,3,3]}/>
           <Hole position={[-6, -0.5, -6]} scale ={[3,3,3]}/>
@@ -64,4 +66,4 @@ export default function Game() {
     </div>
   );
 }
-
+export default Game;
