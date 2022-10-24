@@ -15,6 +15,7 @@ import Diglett8 from "./components/Diglett copy 7";
 import Diglett9 from "./components/Diglett copy 8";
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import Grass from "./components/Grass";
+import { BooleanKeyframeTrack, VectorKeyframeTrack } from "three";
 function Cube(props) {
   // Use useRef hook to access the mesh element
   const mesh = useRef();
@@ -51,12 +52,56 @@ function Cube(props) {
 const Game = () =>{
   const [coords, setCoords] = useState({x: 0, y: 0});
 
+  const [hammerPos, setPos] = useState({x: 0, y: 0, z: 0});
+  const offset = 2;
+
   const handleMouseMove = event => {
     setCoords({
       x: event.clientX - event.target.offsetLeft,
       y: event.clientY - event.target.offsetTop,
     });
   };
+
+  function Bonk(index){
+    switch(index){
+      case 0:
+        hammerPos.x = 0 + offset;
+        hammerPos.z = 0;
+        break;
+      case 1:
+        hammerPos.x = 6 + offset;
+        hammerPos.z = 0;
+        break;
+      case 2:
+        hammerPos.x = -6 + offset;
+        hammerPos.z = 0;
+        break;
+      case 3:
+        hammerPos.x = 0 + offset;
+        hammerPos.z = 6;
+        break;
+      case 4:
+        hammerPos.x = -6 + offset;
+        hammerPos.z = 6;
+        break;
+      case 5:
+        hammerPos.x = 6 + offset;
+        hammerPos.z = 6;
+        break;
+      case 6:
+        hammerPos.x = 6 + offset;
+        hammerPos.z = -6;
+        break;
+      case 7:
+        hammerPos.x = 0 + offset;
+        hammerPos.z = -6;
+        break;
+      case 8:
+        hammerPos.x = -6 + offset;
+        hammerPos.z = -6;
+        break;
+    }
+  }
   
   const [upKeyPressed, setUpKeyPressed] = useState(false);
   return (
@@ -68,17 +113,17 @@ const Game = () =>{
         <ambientLight intensity={0.5} />
         <spotLight position={[20, 20, 20]} angle={0.3} />
         <Suspense fallback={null}>
-          <Cube/>
-          <Hammer2 position={[0,0,0]} scale={[1,1,1]}/>       
-          <Diglett position={[0, -3, 0]} scale={[5, 5, 5]} />
-          <Diglett2 position={[6, -3, 0]} scale={[5, 5, 5]} />
-          <Diglett3 position={[-6, -3, 0]} scale={[5, 5, 5]} />
-          <Diglett4 position={[0, -3, 6]} scale={[5, 5, 5]} />
-          <Diglett5 position={[-6, -3, 6]} scale={[5, 5, 5]} />
-          <Diglett6 position={[6, -3, 6]} scale={[5, 5, 5]} />
-          <Diglett7 position={[6, -3, -6]} scale={[5, 5, 5]} />
-          <Diglett8 position={[0, -3, -6]} scale={[5, 5, 5]} />
-          <Diglett9 position={[-6, -3, -6]} scale={[5, 5, 5]} />
+          {/*<Cube/>*/}
+          <Hammer2 position={[hammerPos.x, hammerPos.y, hammerPos.z]} scale={[1,1,1]} />       
+          <Diglett position={[0, -3, 0]} scale={[5, 5, 5]} onClick={ () => {Bonk(0)}}/>
+          <Diglett2 position={[6, -3, 0]} scale={[5, 5, 5]} onClick={ () => {Bonk(1)}}/>
+          <Diglett3 position={[-6, -3, 0]} scale={[5, 5, 5]} onClick={ () => {Bonk(2)}}/>
+          <Diglett4 position={[0, -3, 6]} scale={[5, 5, 5]} onClick={ () => {Bonk(3)}}/>
+          <Diglett5 position={[-6, -3, 6]} scale={[5, 5, 5]} onClick={ () => {Bonk(4)}}/>
+          <Diglett6 position={[6, -3, 6]} scale={[5, 5, 5]} onClick={ () => {Bonk(5)}}/>
+          <Diglett7 position={[6, -3, -6]} scale={[5, 5, 5]} onClick={ () => {Bonk(6)}}/>
+          <Diglett8 position={[0, -3, -6]} scale={[5, 5, 5]} onClick={ () => {Bonk(7)}}/>
+          <Diglett9 position={[-6, -3, -6]} scale={[5, 5, 5]} onClick={ () => {Bonk(8)}}/>
           <Grass position={[0, -1, 0]} scale ={[5,5,5]}/>
           <Hole position={[0, 0, 0]} scale ={[3,3,3]}/>
           <Hole position={[6, 0, 0]} scale ={[3,3,3]}/>
