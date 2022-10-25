@@ -1,4 +1,5 @@
 import React, { Suspense, useRef, useEffect, useState } from "react";
+import { ReactDOM } from "react-dom";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useSpring, animated } from "@react-spring/three"
 import "./styles/game.css";
@@ -13,9 +14,11 @@ import Diglett6 from "./components/Diglett copy 5";
 import Diglett7 from "./components/Diglett copy 6";
 import Diglett8 from "./components/Diglett copy 7";
 import Diglett9 from "./components/Diglett copy 8";
+import Bonksrc from "./components/bonk_sound.mp3";
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import Grass from "./components/Grass";
 import { BooleanKeyframeTrack, VectorKeyframeTrack } from "three";
+
 function Cube(props) {
   // Use useRef hook to access the mesh element
   const mesh = useRef();
@@ -54,8 +57,11 @@ const Game = () =>{
 
   const [hammerPos, setPos] = useState({x: 0, y: 0, z: 0});
   const [hammerSize, setSize] = useState({scale: 0});
-  const [hammerRotatiom, setRotate] = useState({x: 0, y: 0, z: 0});
+  const [hammerRotation, setRotate] = useState({x: 0, y: 0, z: 0});
   const offset = 1.5;
+
+  const bonkSound = new Audio(Bonksrc);
+  bonkSound.loop = false;
 
   const handleMouseMove = event => {
     setCoords({
@@ -65,51 +71,63 @@ const Game = () =>{
   };
 
   function Bonk(index){
+    bonkSound.currentTime = 0;
+    bonkSound.play();
     switch(index){
       case 0:
         hammerPos.x = 0 + offset;
         hammerPos.z = 0;
         hammerSize.scale = 1;
+        hammerRotation.z = [0, 0, 2/3*Math.PI];
+        setTimeout(()=>{hammerSize.scale = 0; }, 1000)
         break;
       case 1:
         hammerPos.x = 6 + offset;
         hammerPos.z = 0;
         hammerSize.scale = 1;
+        setTimeout(()=>{hammerSize.scale = 0;}, 1000)
         break;
       case 2:
         hammerPos.x = -6 + offset;
         hammerPos.z = 0;
         hammerSize.scale = 1;
+        setTimeout(()=>{hammerSize.scale = 0;}, 1000)
         break;
       case 3:
         hammerPos.x = 0 + offset;
         hammerPos.z = 6;
         hammerSize.scale = 1;
+        setTimeout(()=>{hammerSize.scale = 0;}, 1000)
         break;
       case 4:
         hammerPos.x = -6 + offset;
         hammerPos.z = 6;
         hammerSize.scale = 1;
+        setTimeout(()=>{hammerSize.scale = 0;}, 1000)
         break;
       case 5:
         hammerPos.x = 6 + offset;
         hammerPos.z = 6;
         hammerSize.scale = 1;
+        setTimeout(()=>{hammerSize.scale = 0;}, 1000)
         break;
       case 6:
         hammerPos.x = 6 + offset;
         hammerPos.z = -6;
         hammerSize.scale = 1;
+        setTimeout(()=>{hammerSize.scale = 0;}, 1000)
         break;
       case 7:
         hammerPos.x = 0 + offset;
         hammerPos.z = -6;
         hammerSize.scale = 1;
+        setTimeout(()=>{hammerSize.scale = 0;}, 1000)
         break;
       case 8:
         hammerPos.x = -6 + offset;
         hammerPos.z = -6;
         hammerSize.scale = 1;
+        setTimeout(()=>{hammerSize.scale = 0;}, 1000)
         break;
     }
   }
