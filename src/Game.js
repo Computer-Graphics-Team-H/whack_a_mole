@@ -16,7 +16,6 @@ import Diglett9 from "./components/Diglett copy 8";
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import Grass from "./components/Grass";
 import { BooleanKeyframeTrack, VectorKeyframeTrack } from "three";
-
 const Game = () =>{
   const [coords, setCoords] = useState({x: 0, y: 0});
 
@@ -69,7 +68,7 @@ const Game = () =>{
   return (
     <div id="game">
       <div> 게임 화면 </div>
-      <Canvas >
+      <Canvas>
         <OrbitControls />
         <PerspectiveCamera makeDefault fov={90} position={[0, 4, 10]} />
         <ambientLight intensity={0.5} />
