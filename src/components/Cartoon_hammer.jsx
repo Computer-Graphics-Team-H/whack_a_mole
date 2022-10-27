@@ -6,28 +6,35 @@ source: https://sketchfab.com/3d-models/cartoon-hammer-026d752a132d48369a4e854af
 title: Cartoon hammer
 */
 
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { useGLTF } from '@react-three/drei'
 import { useFrame } from "@react-three/fiber";
+import { Hammering } from "../components/Diglett 0"
+var rotateH=0
+var isHammer=true;
+//해머 내리치는 함수
+function hammerRotate(){
+    rotateH+=1;
+    setTimeout(() => {
+      isHammer=false;
+      rotateH-=1;
+    }, 100);
+    rotateH=0;
+  }
 
 export default function Model(props) {
   const { nodes, materials } = useGLTF('model/cartoon_hammer.glb')
-  const hammering = useRef();
-  
-  const HammerAction=false;
-
-  useFrame(()=>{
-    if(HammerAction){
-    hammering.current.rotation.z+=0.5;
-    setTimeout(() => {
-      hammering.current.rotation.z-=0.5;
-    }, 500);
-  }
+  const group = useRef();
+  const [hammerPos, setPos] = useState({x: 0, y: -0.13, z: 1.08});
+  useFrame(()=>{group.current.rotation.z=rotateH;
+    if(isHammer){
+    hammerRotate();
+    }
   });
   return (
-    <group ref={hammering} {...props} dispose={null}>
+    <group ref={group} {...props} dispose={null}>
       <group rotation={[-Math.PI / 2, 0, 0]}>
-        <group position={[0, -0.13, 1.08]} rotation={[-Math.PI, 0, -0.05]}>
+        <group position={[hammerPos.x, hammerPos.y, hammerPos.z]} rotation={[-Math.PI, 0, -0.05]}>
           <mesh geometry={nodes.Marteau_0.geometry} material={materials.Gris} />
           <mesh geometry={nodes.Marteau_1.geometry} material={materials.Marron_clair} />
           <mesh geometry={nodes.Marteau_1_1.geometry} material={materials.Marron_clair} />

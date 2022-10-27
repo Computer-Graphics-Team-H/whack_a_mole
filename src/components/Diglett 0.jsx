@@ -14,12 +14,15 @@ import { useFrame } from "@react-three/fiber";
 import Bonksrc from "./bonk_sound.mp3";
 import Laughtersrc from "./diglett_laughter.mp3";
 
+Hammering=false;
+export var Hammering;
+export var posX=this.position.x;
+export var pos= this.position.z;
 var isUp = false;
 var isBonked = false;
 var posY = -4;
 const bonkSound = new Audio(Bonksrc);
 const laughSound = new Audio(Laughtersrc);
-
 function digUp(){
   if(!isBonked && !isUp && posY < 0){
     posY +=0.1;
@@ -41,7 +44,9 @@ function digUp(){
 }
 
 function bonked(){
-  var randTime = Math.floor(Math.random()*10000) + 3000; //다시 나오는 딜레이 3초~13초 
+  var randTime = Math.floor(Math.random()*10000) + 3000; //다시 나오는 딜레이 3초~13초\
+  Hammering=true;
+  
   bonkSound.currentTime = 0;
   if(isUp){
     posY = -4;

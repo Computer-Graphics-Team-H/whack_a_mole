@@ -21,9 +21,8 @@ import { BooleanKeyframeTrack, VectorKeyframeTrack } from "three";
 
 const Game = () =>{
   const [coords, setCoords] = useState({x: 0, y: 0});
-
   const [hammerPos, setPos] = useState({x: 0, y: 0, z: 0});
-  const [hammerSize, setSize] = useState({scale: 0});
+  const [hammerSize, setSize] = useState({scale: 1});
   const [hammerRotation, setRotate] = useState({x: 0, y: 0, z: 0});
   const offset = 1.5;
   const timeOffset = 1000;
@@ -39,6 +38,47 @@ const Game = () =>{
   };
   
   const [upKeyPressed, setUpKeyPressed] = useState(false);
+  
+  function Bonk(index){
+    switch(index){
+      case 0:
+        hammerPos.x = 0 + offset;
+        hammerPos.z = 0;
+        break;
+      case 1:
+        hammerPos.x = 6 + offset;
+        hammerPos.z = 0;
+        break;
+      case 2:
+        hammerPos.x = -6 + offset;
+        hammerPos.z = 0;
+        break;
+      case 3:
+        hammerPos.x = 0 + offset;
+        hammerPos.z = 6;
+        break;
+      case 4:
+        hammerPos.x = -6 + offset;
+        hammerPos.z = 6;
+        break;
+      case 5:
+        hammerPos.x = 6 + offset;
+        hammerPos.z = 6;
+        break;
+      case 6:
+        hammerPos.x = 6 + offset;
+        hammerPos.z = -6;
+        break;
+      case 7:
+        hammerPos.x = 0 + offset;
+        hammerPos.z = -6;
+        break;
+      case 8:
+        hammerPos.x = -6 + offset;
+        hammerPos.z = -6;
+        break;
+    }
+  }
   return (
     <div id="game">
       <div> 게임 화면 </div>
@@ -48,7 +88,7 @@ const Game = () =>{
         <ambientLight intensity={0.5} />
         <spotLight position={[20, 20, 20]} angle={0.3} />
         <Suspense fallback={null}>
-          <Hammer2 position={[hammerPos.x, 2.5, hammerPos.z]} scale={[hammerSize.scale,hammerSize.scale,hammerSize.scale]} rotation={[0, 0, 2/3 *Math.PI]} />       
+          <Hammer2 position={[hammerPos.x, 2.5, hammerPos.z]} scale={[hammerSize.scale,hammerSize.scale,hammerSize.scale]} />       
           <Diglett/>
           <Diglett2/>
           <Diglett3/>
