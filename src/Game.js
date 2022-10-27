@@ -3,9 +3,9 @@ import { ReactDOM } from "react-dom";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useSpring, animated } from "@react-spring/three"
 import "./styles/game.css";
-import Diglett from "./components/Diglett 0";
 import Hammer2 from "./components/Cartoon_hammer";
 import Hole from "./components/Hole";
+import Diglett from "./components/Diglett 0";
 import Diglett2 from "./components/Diglett 1";
 import Diglett3 from "./components/Diglett 2";
 import Diglett4 from "./components/Diglett 3";
@@ -22,12 +22,6 @@ import { BooleanKeyframeTrack, VectorKeyframeTrack } from "three";
 const Game = () =>{
   const [coords, setCoords] = useState({x: 0, y: 0});
 
-  const [hammerPos, setPos] = useState({x: 0, y: 0, z: 0});
-  const [hammerSize, setSize] = useState({scale: 0});
-  const [hammerRotation, setRotate] = useState({x: 0, y: 0, z: 0});
-  const offset = 1.5;
-  const timeOffset = 1000;
-
   const bonkSound = new Audio(Bonksrc);
   bonkSound.loop = false;
 
@@ -39,16 +33,17 @@ const Game = () =>{
   };
   
   const [upKeyPressed, setUpKeyPressed] = useState(false);
+
   return (
     <div id="game">
       <div> 게임 화면 </div>
       <Canvas onMouseMove={handleMouseMove}>
-        <OrbitControls />
-        <PerspectiveCamera makeDefault fov={90} position={[0, 4, 10]} />
+        {/* <OrbitControls /> */}
+        <PerspectiveCamera makeDefault fov={90} position={[0, 9, 11]} rotation={[-40/180*Math.PI, 0, 0]} />
         <ambientLight intensity={0.5} />
         <spotLight position={[20, 20, 20]} angle={0.3} />
         <Suspense fallback={null}>
-          <Hammer2 position={[hammerPos.x, 2.5, hammerPos.z]} scale={[hammerSize.scale,hammerSize.scale,hammerSize.scale]} rotation={[0, 0, 2/3 *Math.PI]} />       
+          <Hammer2/>       
           <Diglett/>
           <Diglett2/>
           <Diglett3/>

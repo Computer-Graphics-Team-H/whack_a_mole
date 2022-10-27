@@ -11,17 +11,29 @@ title: Diglett
 import React, { useRef } from "react";
 import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
+import { ActiveHammer } from "./Cartoon_hammer";
 import Bonksrc from "./bonk_sound.mp3";
 import Laughtersrc from "./diglett_laughter.mp3";
 
-var isUp = false;
-var isBonked = false;
+var isUp = false; //false 상태면 올라오지 않음
+var isBonked = false; //true 상태면 올라오지 않음
 var posY = -4;
+var IntervalId;
+
 const bonkSound = new Audio(Bonksrc);
 const laughSound = new Audio(Laughtersrc);
 
+function digIn(speed){ //내려가는 애니메이션
+  posY = posY - 0.1 * speed;
+  
+  if(posY <= -4){
+    posY = -4;
+  }
+}
+
 function digUp(){
   if(!isBonked && !isUp && posY < 0){
+    clearInterval(IntervalId);
     posY +=0.1;
   }
   
@@ -31,8 +43,8 @@ function digUp(){
     isBonked = false;
     setTimeout(() => { //2초가 지나도 맞지 않으면
       if(!isBonked){
-        laughSound.play();
-        posY = -4;
+        //laughSound.play();
+        digIn(2);
         setTimeout(() => {isUp = false;}, 5000);
         //score 계산 함수
       }
@@ -44,7 +56,8 @@ function bonked(){
   var randTime = Math.floor(Math.random()*10000) + 3000; //다시 나오는 딜레이 3초~13초 
   bonkSound.currentTime = 0;
   if(isUp){
-    posY = -4;
+    IntervalId = setInterval(() => {digIn(7);}, 1);
+    ActiveHammer(3);
     bonkSound.play();
     isBonked = true;
     //score 계산 함수
@@ -66,7 +79,7 @@ export default function Diglett(props) {
   })
 
   return (
-    <group ref={group} position={[6, -4, 0]} scale={0.15} onClick={bonked}>
+    <group ref={group} {...props} position={[6, -4, 0]} scale={0.15} onClick={bonked}>
       <primitive object={nodes._rootJoint} />
       <skinnedMesh
         geometry={nodes.Object_6.geometry}

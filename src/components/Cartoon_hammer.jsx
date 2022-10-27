@@ -6,22 +6,115 @@ source: https://sketchfab.com/3d-models/cartoon-hammer-026d752a132d48369a4e854af
 title: Cartoon hammer
 */
 
-import React, { useRef } from 'react'
+import React, { useCallback, useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
+import { useFrame, useState } from "@react-three/fiber";
+
+const offset = 1.5;
+const yOffset = 1;
+var hammerPosX = 0;
+var hammerPosY = -10;
+var hammerPosZ = 0;
+var rotateY=0;
+var hammerScale = false;
+var rotateIntervalId;
+
+function rotateHammer(){
+  rotateY = 0;
+  rotateIntervalId = setInterval(() => {
+    if(rotateY < 90){
+      rotateY += 2;
+    }
+    else{
+      rotateY = 0;
+      hammerScale = false;
+    }
+  }, 1);
+  setTimeout(() => {clearInterval(rotateIntervalId)}, 30);
+}
+
+export function ActiveHammer(index){
+  hammerScale = true;
+  switch(index){
+    case 0:
+      hammerPosX = 0 + offset;
+      hammerPosY = yOffset;
+      hammerPosZ = 0;
+      rotateHammer();
+      break;
+    case 1:
+      hammerPosX = 0 + offset;
+      hammerPosY = yOffset;
+      hammerPosZ = 6;
+      rotateHammer();
+      break;
+    case 2:
+      hammerPosX = 6 + offset;
+      hammerPosY = yOffset;
+      hammerPosZ = 6;
+      rotateHammer();
+      break;
+    case 3:
+      hammerPosX = 6 + offset;
+      hammerPosY = yOffset;
+      hammerPosZ = 0;
+      rotateHammer();
+      break;
+    case 4:
+      hammerPosX = 6 + offset;
+      hammerPosY = yOffset;
+      hammerPosZ = -6;
+      rotateHammer();
+      break;
+    case 5:
+      hammerPosX = 0 + offset;
+      hammerPosY = yOffset;
+      hammerPosZ = -6;
+      rotateHammer();
+      break;
+    case 6:
+      hammerPosX = -6 + offset;
+      hammerPosY = yOffset;
+      hammerPosZ = -6;
+      rotateHammer();
+      break;
+    case 7:
+      hammerPosX = -6 + offset;
+      hammerPosY = yOffset;
+      hammerPosZ = 0;
+      rotateHammer();
+      break;
+    case 8:
+      hammerPosX = -6 + offset;
+      hammerPosY = yOffset;
+      hammerPosZ = 6;
+      rotateHammer();
+      break;
+  }
+}
 
 export default function Model(props) {
   const { nodes, materials } = useGLTF('model/cartoon_hammer.glb')
+  const group = useRef();
+  useFrame(()=>{
+    group.current.rotation.y = rotateY / 180 * Math.PI;
+    if(hammerScale){
+      group.current.position.x = hammerPosX;
+      group.current.position.y = hammerPosY;
+      group.current.position.z = hammerPosZ;
+    }
+    else{
+      group.current.position.x = 0;
+      group.current.position.y = -10;
+      group.current.position.z = 0;
+    }
+  });
   return (
-    <group {...props} dispose={null}>
-      <group rotation={[-Math.PI / 2, 0, 0]}>
-        <group position={[0, -0.13, 1.08]} rotation={[-Math.PI, 0, -0.05]}>
-          <mesh geometry={nodes.Marteau_0.geometry} material={materials.Gris} />
-          <mesh geometry={nodes.Marteau_1.geometry} material={materials.Marron_clair} />
-          <mesh geometry={nodes.Marteau_1_1.geometry} material={materials.Marron_clair} />
-          <mesh geometry={nodes.Marteau_2.geometry} material={materials.Jaune} />
-        </group>
-        <group position={[0, 0, 8.14]} />
-      </group>
+    <group ref={group} {...props} dispose={null} position={[0, -10, 0]} rotation={[Math.PI/2, 0, 0]} >
+      <mesh geometry={nodes.Marteau_0.geometry} material={materials.Gris} />
+      <mesh geometry={nodes.Marteau_1.geometry} material={materials.Marron_clair} />
+      <mesh geometry={nodes.Marteau_1_1.geometry} material={materials.Marron_clair} />
+      <mesh geometry={nodes.Marteau_2.geometry} material={materials.Jaune} />
     </group>
   )
 }
