@@ -152,7 +152,6 @@ const Game = () =>{
         <ambientLight intensity={0.5} />
         <spotLight position={[20, 20, 20]} angle={0.3} />
         <Suspense fallback={null}>
-          {/*<Cube/>*/}
           <Hammer2 position={[hammerPos.x, 2.5, hammerPos.z]} scale={[hammerSize.scale,hammerSize.scale,hammerSize.scale]} rotation={[0, 0, 2/3 *Math.PI]} />       
           <Diglett position={[0, -3, 0]} scale={[5, 5, 5]} onClick={ () => {Bonk(0)}} />
           <Diglett2 position={[6, -3, 0]} scale={[5, 5, 5]} onClick={ () => {Bonk(1)}}/>
@@ -178,9 +177,6 @@ const Game = () =>{
         </Suspense>
 
       </Canvas>
-      <h2>
-      Coords: {coords.x} {coords.y}
-      </h2>
     </div>
   );
 }

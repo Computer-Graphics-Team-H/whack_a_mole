@@ -8,11 +8,24 @@ title: Cartoon hammer
 
 import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
+import { useFrame } from "@react-three/fiber";
 
 export default function Model(props) {
   const { nodes, materials } = useGLTF('model/cartoon_hammer.glb')
+  const hammering = useRef();
+  
+  const HammerAction=false;
+
+  useFrame(()=>{
+    if(HammerAction){
+    hammering.current.rotation.z+=0.5;
+    setTimeout(() => {
+      hammering.current.rotation.z-=0.5;
+    }, 500);
+  }
+  });
   return (
-    <group {...props} dispose={null}>
+    <group ref={hammering} {...props} dispose={null}>
       <group rotation={[-Math.PI / 2, 0, 0]}>
         <group position={[0, -0.13, 1.08]} rotation={[-Math.PI, 0, -0.05]}>
           <mesh geometry={nodes.Marteau_0.geometry} material={materials.Gris} />

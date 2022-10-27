@@ -12,11 +12,10 @@ import { useFrame } from "@react-three/fiber";
 
 export default function Diglett(props) {
   const { nodes, materials } = useGLTF("model/diglett.glb");
-  const group = useRef();
-  useFrame(()=>(group.current.rotation.x+=0.01))
+
 
   return (
-    <group ref={group} {...props} dispose={null}>
+    <group {...props} dispose={null}>
       <group rotation={[-Math.PI / 2, 0, 0]}>
         <group rotation={[Math.PI / 2, 0, 0]} scale={0.03}>
           <primitive object={nodes._rootJoint} />
