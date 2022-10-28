@@ -68,9 +68,6 @@ const Game = () =>{
         </Suspense>
 
       </Canvas>
-      <h2>
-      Coords: {coords.x} {coords.y}
-      </h2>
     </div>
   );
 }
