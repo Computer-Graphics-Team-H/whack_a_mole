@@ -17,20 +17,18 @@ var hammerPosY = -10;
 var hammerPosZ = 0;
 var rotateY=0;
 var hammerScale = false;
+var rotating = false;
 var rotateIntervalId;
 
-function rotateHammer(){
-  rotateY = 0;
-  rotateIntervalId = setInterval(() => {
-    if(rotateY < 90){
-      rotateY += 2;
-    }
-    else{
-      rotateY = 0;
-      hammerScale = false;
-    }
-  }, 1);
-  setTimeout(() => {clearInterval(rotateIntervalId)}, 30);
+function rotateHammer(){  
+  if(rotateY < 90){
+    rotateY += 15;
+  }
+  else{
+    hammerScale = false;
+    rotateY = 0;
+    rotating = false;
+  }
 }
 
 export function ActiveHammer(index){
@@ -40,55 +38,64 @@ export function ActiveHammer(index){
       hammerPosX = 0 + offset;
       hammerPosY = yOffset;
       hammerPosZ = 0;
-      rotateHammer();
+      rotateY = 0;
+      rotating = true;
       break;
     case 1:
       hammerPosX = 0 + offset;
       hammerPosY = yOffset;
       hammerPosZ = 6;
-      rotateHammer();
+      rotateY = 0;
+      rotating = true;
       break;
     case 2:
       hammerPosX = 6 + offset;
       hammerPosY = yOffset;
       hammerPosZ = 6;
-      rotateHammer();
+      rotateY = 0;
+      rotating = true;
       break;
     case 3:
       hammerPosX = 6 + offset;
       hammerPosY = yOffset;
       hammerPosZ = 0;
-      rotateHammer();
+      rotateY = 0;
+      rotating = true;
       break;
     case 4:
       hammerPosX = 6 + offset;
       hammerPosY = yOffset;
       hammerPosZ = -6;
-      rotateHammer();
+      rotateY = 0;
+      rotating = true;
       break;
     case 5:
       hammerPosX = 0 + offset;
       hammerPosY = yOffset;
       hammerPosZ = -6;
-      rotateHammer();
+      rotateY = 0;
+      rotating = true;
       break;
     case 6:
       hammerPosX = -6 + offset;
       hammerPosY = yOffset;
       hammerPosZ = -6;
-      rotateHammer();
+      rotateY = 0;
+      rotating = true;
       break;
     case 7:
       hammerPosX = -6 + offset;
       hammerPosY = yOffset;
       hammerPosZ = 0;
-      rotateHammer();
+      rotateY = 0;
+      rotating = true;
       break;
     case 8:
       hammerPosX = -6 + offset;
       hammerPosY = yOffset;
       hammerPosZ = 6;
-      rotateHammer();
+      rotateY = 0;
+      rotating = true;
       break;
   }
 }
@@ -98,6 +105,10 @@ export default function Model(props) {
   const group = useRef();
   useFrame(()=>{
     group.current.rotation.y = rotateY / 180 * Math.PI;
+    if(rotating){
+      rotateHammer();
+    }
+    //hammerScale에 따라서 해머 위치 조정
     if(hammerScale){
       group.current.position.x = hammerPosX;
       group.current.position.y = hammerPosY;
