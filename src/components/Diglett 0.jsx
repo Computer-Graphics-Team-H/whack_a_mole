@@ -73,7 +73,7 @@ function bonked(){
     //score 계산 함수
   }
 }
-
+var randTime = Math.floor(Math.random()*10000) + 3000;
 export default function Diglett(props) {
   const { nodes, materials } = useGLTF("model/diglett.glb");
   const group = useRef();
@@ -81,7 +81,8 @@ export default function Diglett(props) {
 
   useFrame(() =>{
     group.current.position.y = posY;
-    digUp();
+    setTimeout(()=>{digUp();},randTime)
+    
   })
 
   return (

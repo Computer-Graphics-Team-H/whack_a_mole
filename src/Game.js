@@ -25,19 +25,14 @@ const Game = () =>{
   const bonkSound = new Audio(Bonksrc);
   bonkSound.loop = false;
 
-  const handleMouseMove = event => {
-    setCoords({
-      x: event.clientX - event.target.offsetLeft,
-      y: event.clientY - event.target.offsetTop,
-    });
-  };
+
   
   const [upKeyPressed, setUpKeyPressed] = useState(false);
 
   return (
     <div id="game">
       <div> 게임 화면 </div>
-      <Canvas onMouseMove={handleMouseMove}>
+      <Canvas>
         {/* <OrbitControls /> */}
         <PerspectiveCamera makeDefault fov={90} position={[0, 9, 11]} rotation={[-40/180*Math.PI, 0, 0]} />
         <ambientLight intensity={0.5} />
