@@ -72,10 +72,11 @@ export default function Diglett(props) {
   const { nodes, materials } = useGLTF("model/diglett copy 5.glb");
   const group = useRef();
   bonkSound.loop = false;
+  var randTime = Math.floor(Math.random()*10000);
 
   useFrame(() =>{
     group.current.position.y = posY;
-    digUp();
+    setTimeout(()=>{digUp();},randTime)
   })
 
   return (

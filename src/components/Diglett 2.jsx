@@ -75,7 +75,7 @@ export default function Diglett(props) {
 
   useFrame(() =>{
     group.current.position.y = posY;
-    digUp();
+    setTimeout(()=>{digUp();},randTime)
   })
 
   return (

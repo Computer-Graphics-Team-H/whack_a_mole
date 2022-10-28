@@ -67,11 +67,12 @@ function bonked(){
     //score 계산 함수
   }
 }
-var randTime = Math.floor(Math.random()*10000) + 3000;
+
 export default function Diglett(props) {
   const { nodes, materials } = useGLTF("model/diglett copy.glb");
   const group = useRef();
   bonkSound.loop = false;
+  var randTime = Math.floor(Math.random()*10000);
 
   useFrame(() =>{
     group.current.position.y = posY;
