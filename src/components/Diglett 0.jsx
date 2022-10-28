@@ -48,7 +48,7 @@ function digUp(){
 
     BonkLimitTimeout = setTimeout(() => { //2초가 지나도 맞지 않으면
       if(!isBonked){
-        //laughSound.play();
+        laughSound.play();
         digIn(2);
         DigupTimeout = setTimeout(() => {isUp = false;}, 5000);
         //score 계산 함수
