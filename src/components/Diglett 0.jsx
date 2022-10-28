@@ -58,7 +58,7 @@ function digUp(){
 }
 
 function bonked(){
-  var randTime = Math.floor(Math.random()*10000) + 3000; //다시 나오는 딜레이 3초~13초\
+  var randTime = Math.floor(Math.random()*10000) + 3000; //다시 나오는 딜레이 3초~13초
 
   bonkSound.currentTime = 0;
   if(isUp){
