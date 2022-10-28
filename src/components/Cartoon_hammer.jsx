@@ -103,6 +103,7 @@ export function ActiveHammer(index){
 export default function Model(props) {
   const { nodes, materials } = useGLTF('model/cartoon_hammer.glb')
   const group = useRef();
+  
   useFrame(()=>{
     group.current.rotation.y = rotateY / 180 * Math.PI;
     if(rotating){
@@ -120,6 +121,7 @@ export default function Model(props) {
       group.current.position.z = 0;
     }
   });
+  
   return (
     <group ref={group} {...props} dispose={null} position={[0, -10, 0]} rotation={[Math.PI/2, 0, 0]} >
       <mesh geometry={nodes.Marteau_0.geometry} material={materials.Gris} />
