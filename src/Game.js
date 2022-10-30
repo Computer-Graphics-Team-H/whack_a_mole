@@ -19,9 +19,11 @@ import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import Grass from "./components/Grass";
 import { BooleanKeyframeTrack, VectorKeyframeTrack } from "three";
 import LifeBar from "./components/LifeBar";
+import MainModal from "./components/MainModal";
 
 import { lifeState } from "./atom/Life";
-import { useRecoilState, useResetRecoilState } from "recoil";
+import { playState } from "./atom/Play";
+import { useRecoilState, useResetRecoilState, useRecoilValue } from "recoil";
 import useInterval from "./components/useInterval";
 
 const Game = () => {
@@ -35,27 +37,33 @@ const Game = () => {
   const [life, setLife] = useRecoilState(lifeState);
   const resetLife = useResetRecoilState(lifeState);
 
-  const [isRunning, setIsRunning] = useState(false);
+  const [playing, setPlaying] = useRecoilState(playState);
 
   // HP decrease interval 1s.
   useInterval(
     () => {
       if (life > 0) setLife(life - 1);
+      console.log("HP callback" + playing);
     },
-    isRunning ? 300 : null
+    playing.isPlaying ? 100 : null
   );
 
   // Canvas Ready Callback
   const onCanvasReady = () => {
     resetLife();
-    setTimeout(() => {
-      setIsRunning(true);
-    }, 5000);
+    setPlaying((prev) => {
+      const variable = { ...prev };
+      variable.isReady = true;
+
+      return { ...variable };
+    });
+    console.log("Canvas ready" + playing);
   };
 
   return (
     <div id="game">
-      <div> 게임 화면 </div>
+      <MainModal />
+
       <LifeBar />
       <Canvas onCreated={() => onCanvasReady()}>
         {/* <OrbitControls /> */}
