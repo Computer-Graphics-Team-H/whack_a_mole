@@ -11,8 +11,6 @@ export default function MainModal() {
   const [playing, setPlaying] = useRecoilState(playState);
 
   function closeModal() {
-    console.log("In modal function" + playing);
-
     if (playing.isReady) {
       setOpen(false);
       setPlaying((prev) => {

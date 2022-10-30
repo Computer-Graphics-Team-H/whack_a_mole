@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import MainModal from "./components/MainModal";
 import { Accordion, Icon } from "semantic-ui-react";
+import LifeBar from "./components/LifeBar";
+import ScoreBar from "./components/ScoreBar";
 
 export default function Home() {
   const [isShown, setIsShown] = useState(false);

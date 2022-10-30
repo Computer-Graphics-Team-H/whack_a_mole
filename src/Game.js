@@ -3,6 +3,8 @@ import { ReactDOM } from "react-dom";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useSpring, animated } from "@react-spring/three";
 import "./styles/game.css";
+import styled from "styled-components";
+
 import Hammer2 from "./components/Cartoon_hammer";
 import Hole from "./components/Hole";
 import Diglett from "./components/Diglett 0";
@@ -18,6 +20,7 @@ import Bonksrc from "./components/bonk_sound.mp3";
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import Grass from "./components/Grass";
 import { BooleanKeyframeTrack, VectorKeyframeTrack } from "three";
+
 import LifeBar from "./components/LifeBar";
 import MainModal from "./components/MainModal";
 
@@ -25,6 +28,8 @@ import { lifeState } from "./atom/Life";
 import { playState } from "./atom/Play";
 import { useRecoilState, useResetRecoilState, useRecoilValue } from "recoil";
 import useInterval from "./components/useInterval";
+import ScoreBar from "./components/ScoreBar";
+import { useNavigate } from "react-router-dom";
 
 const Game = () => {
   const [coords, setCoords] = useState({ x: 0, y: 0 });
@@ -38,14 +43,41 @@ const Game = () => {
   const resetLife = useResetRecoilState(lifeState);
 
   const [playing, setPlaying] = useRecoilState(playState);
-
+  const resetPlaying = useResetRecoilState(playState);
+  
+  const navigate = useNavigate();
   // HP decrease interval 1s.
   useInterval(
     () => {
-      if (life > 0) setLife(life - 1);
-      console.log("HP callback" + playing);
+      if (life == 0) {
+        // Game Over
+        const score = playing.time;
+        navigate("/gameover", {state: score});
+        console.log(playing.time);
+        resetPlaying();
+
+        return;
+      }
+      
+        setLife(life - 1);
+     
+
     },
-    playing.isPlaying ? 100 : null
+    playing?.isPlaying ? 100 : null
+  );
+
+  useInterval(
+    () => {
+      setPlaying((prev) => {
+        if (life > 0) {
+          const variable = { ...prev };
+          variable.time += 1;
+
+          return { ...variable };
+        }
+      });
+    },
+    playing?.isPlaying ? 1000 : null
   );
 
   // Canvas Ready Callback
@@ -57,14 +89,17 @@ const Game = () => {
 
       return { ...variable };
     });
-    console.log("Canvas ready" + playing);
   };
 
   return (
     <div id="game">
       <MainModal />
 
-      <LifeBar />
+      <PlayInfoWrapper>
+        <LifeBar />
+        <ScoreBar />
+      </PlayInfoWrapper>
+
       <Canvas onCreated={() => onCanvasReady()}>
         {/* <OrbitControls /> */}
         <PerspectiveCamera
@@ -140,3 +175,10 @@ const Game = () => {
   );
 };
 export default Game;
+
+const PlayInfoWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
