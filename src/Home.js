@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import LifeBar from "./components/LifeBar";
 
 export default function Home() {
   return (
