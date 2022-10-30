@@ -21,8 +21,6 @@ var isBonked = false; //true 상태면 올라오지 않음
 var posY = -4;
 var IntervalId;
 var BonkLimitTimeout;
-var DigupTimeout;
-var BonkedTimeout;
 
 const bonkSound = new Audio(Bonksrc);
 const laughSound = new Audio(Laughtersrc);
@@ -50,7 +48,7 @@ function digUp(){
       if(!isBonked){
         laughSound.play();
         digIn(2);
-        DigupTimeout = setTimeout(() => {isUp = false;}, 5000);
+        setTimeout(() => {isUp = false;}, 5000);
         //score 계산 함수
       }
     }, 2000);
@@ -59,15 +57,16 @@ function digUp(){
 
 function bonked(){
   var randTime = Math.floor(Math.random()*10000) + 3000; //다시 나오는 딜레이 3초~13초
-
   bonkSound.currentTime = 0;
+
   if(isUp){
+    isBonked = true;
     IntervalId = setInterval(() => {digIn(7);}, 1);
     ActiveHammer(0);
     bonkSound.play();
-    isBonked = true;
+    clearTimeout(BonkLimitTimeout);
     //score 계산 함수
-    BonkedTimeout = setTimeout(() => {isUp = false; isBonked = false;}, randTime);
+    setTimeout(() => {isUp = false; isBonked = false;}, randTime);
   }
   else{
     //score 계산 함수
@@ -78,11 +77,11 @@ export default function Diglett(props) {
   const { nodes, materials } = useGLTF("model/diglett.glb");
   const group = useRef();
   bonkSound.loop = false;
-  var randTime = Math.floor(Math.random()*10000);
+  var randTime = Math.floor(Math.random()*10000) + 1000;
+
   useFrame(() =>{
     group.current.position.y = posY;
-    setTimeout(()=>{digUp();},randTime)
-    
+    setTimeout(()=>{digUp();},randTime);
   })
 
   return (
