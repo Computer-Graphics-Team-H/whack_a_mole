@@ -48,7 +48,7 @@ function digUp(){
 
     BonkLimitTimeout = setTimeout(() => { //2초가 지나도 맞지 않으면
       if(!isBonked){
-        //laughSound.play();
+        laughSound.play();
         digIn(2);
         DigupTimeout = setTimeout(() => {isUp = false;}, 5000);
         //score 계산 함수
@@ -78,10 +78,11 @@ export default function Diglett(props) {
   const { nodes, materials } = useGLTF("model/diglett.glb");
   const group = useRef();
   bonkSound.loop = false;
-
+  var randTime = Math.floor(Math.random()*10000);
   useFrame(() =>{
     group.current.position.y = posY;
-    digUp();
+    setTimeout(()=>{digUp();},randTime)
+    
   })
 
   return (
