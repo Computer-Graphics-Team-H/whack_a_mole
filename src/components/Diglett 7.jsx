@@ -19,8 +19,10 @@ import { useSetRecoilState } from "recoil";
 
 var isUp = false; //false 상태면 올라오지 않음
 var isBonked = false; //true 상태면 올라오지 않음
+
 var posY = -4;
 var IntervalId;
+var BonkLimitTimeout;
 
 const bonkSound = new Audio(Bonksrc);
 const laughSound = new Audio(Laughtersrc);
@@ -36,15 +38,18 @@ function digIn(speed) {
 
 function digUp() {
   if (!isBonked && !isUp && posY < 0) {
+    //망치를 맞은 직후도, 올라올 수 없는 상태도 아닌데 Y 좌표가 0 이하인 경우 상승
     clearInterval(IntervalId);
     posY += 0.1;
   }
 
   if (posY >= 0) {
+    //Y 좌표가 0에 도달하면
     posY = 0;
     isUp = true;
     isBonked = false;
-    setTimeout(() => {
+
+    BonkLimitTimeout = setTimeout(() => {
       //2초가 지나도 맞지 않으면
       if (!isBonked) {
         laughSound.play();
@@ -61,13 +66,15 @@ function digUp() {
 function bonked() {
   var randTime = Math.floor(Math.random() * 10000) + 3000; //다시 나오는 딜레이 3초~13초
   bonkSound.currentTime = 0;
+
   if (isUp) {
+    isBonked = true;
     IntervalId = setInterval(() => {
       digIn(7);
     }, 1);
     ActiveHammer(7);
     bonkSound.play();
-    isBonked = true;
+    clearTimeout(BonkLimitTimeout);
     //score 계산 함수
     setTimeout(() => {
       isUp = false;
@@ -82,7 +89,7 @@ export default function Diglett(props) {
   const { nodes, materials } = useGLTF("model/diglett copy 7.glb");
   const group = useRef();
   bonkSound.loop = false;
-  var randTime = Math.floor(Math.random() * 10000);
+  var randTime = Math.floor(Math.random() * 10000) + 1000;
 
   useFrame(() => {
     group.current.position.y = posY;
