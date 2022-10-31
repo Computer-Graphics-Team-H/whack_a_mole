@@ -28,11 +28,12 @@ export default function Home() {
   return (
     <HomeWrapper>
       <Title className="title">Whack a mole</Title>
-      <img id="logo" src="/assets/logo.jpg" />
+      <img id="logo" src="/assets/whack-a-mole (6).png" />
       <StartButton to={"/game"}> Start </StartButton>
 
       <Accordion styled>
         <Accordion.Title
+          className="accordion_title"
           onClick={() => {
             setIsShown(!isShown);
           }}
@@ -40,7 +41,8 @@ export default function Home() {
           <Icon name="dropdown" />
           How to play?
         </Accordion.Title>
-        <Accordion.Content active={isShown}>
+        <Accordion.Content active={isShown}
+        className="accordion_content">
           ⏳ Your hp decrease according to time
           <br /> 🔨 You can catch mole with your hammer
           <br /> 📸 Avoid the attacking mole by changing the camera's point of
@@ -56,15 +58,20 @@ export default function Home() {
 
 const HomeWrapper = styled.div`
   width: 100%;
-  height: 100%;
+  height:100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: black;
 
   #logo {
-    width: 300px;
-    margin: 10px;
+    width: 100px;
+    margin: 20px 0 50px 0;
+  }
+
+  .accordion_title, .accordion_content{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
   }
 `;
 
@@ -73,6 +80,7 @@ const Title = styled.div`
   font-weight: 600;
   text-align: center;
   margin: 50px 0 10px 0;
+  color: #fff;
 `;
 
 const StartButton = styled(Link)`

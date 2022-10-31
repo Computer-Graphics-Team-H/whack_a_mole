@@ -103,7 +103,7 @@ const Game = () => {
 })
   
   return (
-    <div id="game">
+    <GameWrapper id="game">
       <MainModal />
 
       <PlayInfoWrapper>
@@ -183,7 +183,7 @@ const Game = () => {
           />
         </Suspense>
       </Canvas>
-    </div>
+    </GameWrapper>
   );
 };
 
@@ -196,3 +196,9 @@ const PlayInfoWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
 `;
+
+const GameWrapper = styled.div`
+  width: 100%;
+  height:100vh;
+  background-color: black;
+`

@@ -32,10 +32,12 @@ const ScoreBarWrapper = styled.div`
   justify-content: center;
   margin-right: 20px;
 
-  font-size: 16px;
+  font-size: 24px;
+  color: #fff;
 
   .title {
     font-weight: 600;
     margin-right: 5px;
+    color: rgba(16, 177, 145, 1);
   }
 `;

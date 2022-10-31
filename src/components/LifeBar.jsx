@@ -27,8 +27,8 @@ export default function LifeBar() {
 }
 
 const LifeBarWrapper = styled.div`
-  width: 300px;
-  margin: 10px;
+  width: 400px;
+  margin: 30px 10px 10px 10px;
 
   .progress {
     font-size: 16px;

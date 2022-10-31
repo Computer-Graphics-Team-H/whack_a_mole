@@ -15,33 +15,33 @@ export default function GameOver() {
     <GameOverWrapper>
       <div className="title">Game Over</div>
       <div className="score">⏱️{timeStr}</div>
-      <img id="logo" src="/assets/logo.jpg" />
-
+      
       <Button to="/">Go home</Button>
     </GameOverWrapper>
   );
 }
 
 const GameOverWrapper = styled.div`
+  width: 100%;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 
+  background-color: black;
+  color: #fff;
+
   .title {
     font-weight: 800;
     font-size: 32px;
     line-height: 2;
-     margin: 50px 0 10px 0;
-  }
-
-  #logo {
-    width: 300px;
-    margin: 10px;
+    margin: 50px 0 10px 0;
   }
 
   .score{
-font-size: 24px;
+    font-size: 24px;
+    margin-bottom: 50px;
   }
 `;
 
