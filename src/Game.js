@@ -19,7 +19,7 @@ import Diglett9 from "./components/Diglett 8";
 import Bonksrc from "./components/bonk_sound.mp3";
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import Grass from "./components/Grass";
-import { BooleanKeyframeTrack, VectorKeyframeTrack } from "three";
+import { BooleanKeyframeTrack, Vector3, VectorKeyframeTrack } from "three";
 
 import LifeBar from "./components/LifeBar";
 import MainModal from "./components/MainModal";
@@ -30,6 +30,7 @@ import { useRecoilState, useResetRecoilState, useRecoilValue } from "recoil";
 import useInterval from "./components/useInterval";
 import ScoreBar from "./components/ScoreBar";
 import { useNavigate } from "react-router-dom";
+import Keyboard2 from "./components/Keyboard2";
 
 const Game = () => {
   const [coords, setCoords] = useState({ x: 0, y: 0 });
@@ -46,10 +47,10 @@ const Game = () => {
   const resetPlaying = useResetRecoilState(playState);
   
   const navigate = useNavigate();
-  // HP decrease interval 1s.
+  // HP decrease interval 1s. ** 후에 흙뿌리기랑 감안해서 속도 조정 
   useInterval(
     () => {
-      if (life == 0) {
+      if (life <= 0) {
         // Game Over
         const score = playing.time;
         navigate("/gameover", {state: score});
@@ -59,7 +60,7 @@ const Game = () => {
         return;
       }
       
-        setLife(life - 1);
+      setLife(life - 1);
     },
     playing.isPlaying ? 1000 : null
   );
@@ -90,6 +91,20 @@ const Game = () => {
     });
   };
 
+  // Camera
+  const [camera, setCamera] = useState({ pov: 90, position: [0, 10, 15] });
+  document.addEventListener("keydown", (event)=>{
+    const key = event.keyCode
+
+    if (key == 38) { // Up
+      const newCamera = { pov: 20, position: [0, 60, 70] }
+      setCamera(newCamera);
+    } else if (key == 40) { // Down
+        const newCamera = { pov: 90, position: [0, 10, 15] }
+        setCamera(newCamera);
+    }
+})
+  
   return (
     <div id="game">
       <MainModal />
@@ -100,15 +115,16 @@ const Game = () => {
       </PlayInfoWrapper>
 
       <Canvas onCreated={() => onCanvasReady()}>
-        <OrbitControls />
+        {/* <OrbitControls /> */}
         <PerspectiveCamera
           makeDefault
-          fov={90}
-          position={[0, 9, 11]}
+          fov={camera.pov}
+          position={camera.position}
           rotation={[(-40 / 180) * Math.PI, 0, 0]}
+          lookAt={new Vector3(0, 0, 0)}
         />
         <ambientLight intensity={0.5} />
-        <spotLight position={[20, 20, 20]} angle={0.3} />
+        <spotLight position={[10, 60, 30]} angle={0.2} />
         <Suspense fallback={null}>
           <Hammer2 />
           <Diglett />
@@ -173,6 +189,8 @@ const Game = () => {
     </div>
   );
 };
+
+// 
 export default Game;
 
 const PlayInfoWrapper = styled.div`

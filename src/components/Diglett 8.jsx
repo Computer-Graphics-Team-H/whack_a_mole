@@ -135,7 +135,12 @@ export default function Diglett(props) {
   const life = useSetRecoilState(lifeState);
   const onBonked = () => {
     bonked();
-    life((prev) => prev + points[randColor]);
+     life((prev) => {
+      if (prev + points[randColor] >= 100)
+        return 100
+      else 
+        return prev + points[randColor]
+    });
   };
 
   return (
