@@ -1,7 +1,5 @@
-import React, { Suspense, useRef, useEffect, useState } from "react";
-import { ReactDOM } from "react-dom";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { useSpring, animated } from "@react-spring/three";
+import React, { Suspense, useState } from "react";
+import { Canvas} from "@react-three/fiber";
 import "./styles/game.css";
 import styled from "styled-components";
 
@@ -19,7 +17,7 @@ import Diglett9 from "./components/Diglett 8";
 import Bonksrc from "./components/bonk_sound.mp3";
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import Grass from "./components/Grass";
-import { BooleanKeyframeTrack, Vector3, VectorKeyframeTrack } from "three";
+import { Vector3 } from "three";
 
 import LifeBar from "./components/LifeBar";
 import MainModal from "./components/MainModal";
@@ -30,7 +28,6 @@ import { useRecoilState, useResetRecoilState, useRecoilValue } from "recoil";
 import useInterval from "./components/useInterval";
 import ScoreBar from "./components/ScoreBar";
 import { useNavigate } from "react-router-dom";
-import Keyboard2 from "./components/Keyboard2";
 
 const Game = () => {
   const [coords, setCoords] = useState({ x: 0, y: 0 });
