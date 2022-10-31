@@ -8,7 +8,7 @@ title: Diglett
 
 //(0, 0)(center) diglett
 
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { ActiveHammer } from "./Cartoon_hammer";
@@ -24,6 +24,9 @@ var posY = -4;
 var IntervalId;
 var BonkLimitTimeout;
 
+var isChanged = false; // 색이 바뀌었는지 
+var randColor = 2; // 두더지 종류
+
 const bonkSound = new Audio(Bonksrc);
 const laughSound = new Audio(Laughtersrc);
 
@@ -33,6 +36,11 @@ function digIn(speed) {
 
   if (posY <= -4) {
     posY = -4;
+
+    if (!isChanged) {
+      randColor = Math.floor(Math.random() * 1000) % 3; //0,1,2 
+      isChanged = true;
+    }
   }
 }
 
@@ -48,6 +56,7 @@ function digUp() {
     posY = 0;
     isUp = true;
     isBonked = false;
+    isChanged = false;
 
     BonkLimitTimeout = setTimeout(() => {
       //2초가 지나도 맞지 않으면
@@ -93,18 +102,43 @@ export default function Diglett(props) {
   var randTime = Math.floor(Math.random() * 10000) + 1000;
 
   useFrame(() => {
+    changeColor(colors[randColor]);
+
     group.current.position.y = posY;
     setTimeout(() => {
-      digUp();
+       digUp();
     }, randTime);
   });
 
-  // Life + 5
+  // 두더지 색 변경 
+  const colors = ["black", "yellow", "default"];
+  const points = [-10, 10, 5];
+
+  const [myMaterials, setMyMaterials] = useState(materials);
+  function changeColor(color) {
+    switch (color) {
+      case "black":
+        materials.Body00.color = { isColor: true, r: 0.2, g: 0.2, b: 0.2 }
+        materials.material.color = { isColor: true, r: 0.2, g: 0.2, b: 0.2 }
+        break;
+      case "yellow":
+        materials.Body00.color = { isColor: true, r: 1, g: 1, b: 0 }
+        materials.material.color = { isColor: true, r: 1, g: 1, b: 0 }
+        break;
+      default:
+        materials.Body00.color = { isColor: true, r: 1, g:1, b: 1}
+        materials.material.color = { isColor: true, r: 1, g: 1, b: 1 }
+    }
+    setMyMaterials(materials);
+  }
+
+  // HP 바 반영 
   const life = useSetRecoilState(lifeState);
   const onBonked = () => {
     bonked();
-    life((prev) => prev + 5);
+    life((prev) => prev + points[randColor]);
   };
+
 
   return (
     <group
@@ -113,16 +147,17 @@ export default function Diglett(props) {
       position={[0, -4, 0]}
       scale={0.15}
       onClick={onBonked}
+      color={"000"}
     >
       <primitive object={nodes._rootJoint} />
       <skinnedMesh
         geometry={nodes.Object_6.geometry}
-        material={materials.Body00}
+        material={myMaterials.Body00}
         skeleton={nodes.Object_6.skeleton}
       />
       <skinnedMesh
         geometry={nodes.Object_7.geometry}
-        material={materials.material}
+        material={myMaterials.material}
         skeleton={nodes.Object_7.skeleton}
       />
     </group>

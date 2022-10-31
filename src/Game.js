@@ -61,7 +61,7 @@ const Game = () => {
       
         setLife(life - 1);
     },
-    playing.isPlaying ? 100 : null
+    playing.isPlaying ? 1000 : null
   );
 
   useInterval(
@@ -100,7 +100,7 @@ const Game = () => {
       </PlayInfoWrapper>
 
       <Canvas onCreated={() => onCanvasReady()}>
-        {/* <OrbitControls /> */}
+        <OrbitControls />
         <PerspectiveCamera
           makeDefault
           fov={90}
