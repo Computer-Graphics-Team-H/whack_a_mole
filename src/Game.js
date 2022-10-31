@@ -60,24 +60,23 @@ const Game = () => {
       }
       
         setLife(life - 1);
-     
-
     },
-    playing?.isPlaying ? 100 : null
+    playing.isPlaying ? 100 : null
   );
 
   useInterval(
     () => {
+      if (life > 0) {
       setPlaying((prev) => {
-        if (life > 0) {
+        
           const variable = { ...prev };
           variable.time += 1;
 
           return { ...variable };
-        }
       });
+      }
     },
-    playing?.isPlaying ? 1000 : null
+    playing.isPlaying ? 1000 : null
   );
 
   // Canvas Ready Callback
