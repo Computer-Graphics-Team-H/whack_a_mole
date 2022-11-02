@@ -96,6 +96,8 @@ const Game = () => {
     if (key == 38) { // Up
       const newCamera = { pov: 20, position: [0, 60, 70] }
       setCamera(newCamera);
+
+      
     } else if (key == 40) { // Down
         const newCamera = { pov: 90, position: [0, 10, 15] }
         setCamera(newCamera);
