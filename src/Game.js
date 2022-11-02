@@ -24,13 +24,16 @@ import MainModal from "./components/MainModal";
 
 import { lifeState } from "./atom/Life";
 import { playState } from "./atom/Play";
-import { useRecoilState, useResetRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useResetRecoilState } from "recoil";
 import useInterval from "./components/useInterval";
 import ScoreBar from "./components/ScoreBar";
 import { useNavigate } from "react-router-dom";
+import Attack from "./components/Attack";
+import { attackState } from "./atom/Time";
 
 const Game = () => {
   const [coords, setCoords] = useState({ x: 0, y: 0 });
+  const[isAttack, setIsAttack] = useRecoilState(attackState);
 
   const bonkSound = new Audio(Bonksrc);
   bonkSound.loop = false;
@@ -185,6 +188,8 @@ const Game = () => {
           />
         </Suspense>
       </Canvas>
+      <Attack/>
+      {/* {isAttack && (<Attack></Attack>)} */}
     </GameWrapper>
   );
 };

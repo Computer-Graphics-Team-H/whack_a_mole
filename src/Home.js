@@ -17,7 +17,6 @@ import Diglett6 from "./components/Diglett 5";
 import Diglett7 from "./components/Diglett 6";
 import Diglett8 from "./components/Diglett 7";
 import Diglett9 from "./components/Diglett 8";
-import Attack from './components/Attack';
 
 import{ Suspense, useRef, useEffect,  } from "react";
 import { ReactDOM } from "react-dom";
@@ -55,7 +54,6 @@ export default function Home() {
           Then, Good luck!
         </Accordion.Content>
       </Accordion>
-      <Attack/>
     </HomeWrapper>
   );
 }

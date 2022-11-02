@@ -4,30 +4,36 @@ import styled from "styled-components";
 import UseInterval from "./useInterval";
 import { useSetRecoilState } from 'recoil';
 import { lifeState } from "../atom/Life";
+import { attackState} from "../atom/Time";
+import { useRecoilState } from 'recoil';
 
-var randEventTime = 10;
-var isAttack = true;
+var availableAttack = true;
 
 export default function Attack(){
     const[isShownWarning, setIsShownWarning] = useState(false);
     const[isShownSoil, setIsShownSoil] = useState(false);
 
+    var time = 10;
     const life = useSetRecoilState(lifeState);
+    const [isAttack, setIsAttack] = useRecoilState(attackState);
 
     function attackSoil(){
+        setIsAttack(true);
         setTimeout(()=>{
-          if (isAttack === false){
+          if (availableAttack === false){
             setIsShownWarning(false);
+            setIsAttack(false);
             return attackSoil
           }
-          randEventTime = Math.floor((Math.random() * 1000) % 8 + 3); //3~9
-          console.log(randEventTime)
+          time = Math.floor((Math.random() * 1000) % 8 + 3); //3~9
+          console.log(time)
           setIsShownWarning(true);          
         }, 3000);
 
         setTimeout(()=>{
-          if (isAttack == false){
+          if (availableAttack == false){
             setIsShownWarning(false);
+            setIsAttack(false);
             return attackSoil
           }
           setIsShownWarning(false);
@@ -37,33 +43,34 @@ export default function Attack(){
         setTimeout(()=>{
           setIsShownSoil(true);
           life((prev=>prev-15));
-          if (isAttack == false){
+          if (availableAttack == false){
             setIsShownSoil(false);
+            setIsAttack(false);
             return attackSoil
           }
         }, 5000);
 
         setTimeout(()=>{
-          // if (isAttack === false){
+          // if (availableAttack === false){
           //   setIsShownSoil(false);
           //   return attackSoil
           // }
           setIsShownSoil(false);
-            
+          setIsAttack(false);
         }, 6000);
     }
 
-    UseInterval(attackSoil, randEventTime * 1000)
+    UseInterval(attackSoil, time * 1000)
 
     document.addEventListener("keydown", (event)=>{
       const key = event.keyCode
   
       if (key == 38) { // Up
-        isAttack = false
+        availableAttack = false
   
         
       } else if (key == 40) { // Down
-        isAttack = true
+        availableAttack = true
       }
     })
 
@@ -76,21 +83,20 @@ export default function Attack(){
 }
 
 const AttackDiv = styled.div`
-  width: 100vw;
-  height: 100vh;
+  
   position: absolute;
   left: 0;
   top: 0;
   
   #warning{
     background-color: rgba(255, 0, 0, 0.3);
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+  height: 100vh;
   }
   
   #soil{
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+  height: 100vh;
   }
 `;
 
