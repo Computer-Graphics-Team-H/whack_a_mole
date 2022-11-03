@@ -41,20 +41,15 @@ export default function Attack(){
         }, 4000);
 
         setTimeout(()=>{
-          setIsShownSoil(true);
-          life((prev=>prev-15));
-          if (availableAttack == false){
-            setIsShownSoil(false);
-            setIsAttack(false);
+          if (availableAttack == true){
+            setIsShownSoil(true);
+            setIsAttack(true);
+            life((prev=>prev-15));
             return attackSoil
           }
         }, 5000);
 
         setTimeout(()=>{
-          // if (availableAttack === false){
-          //   setIsShownSoil(false);
-          //   return attackSoil
-          // }
           setIsShownSoil(false);
           setIsAttack(false);
         }, 6000);
