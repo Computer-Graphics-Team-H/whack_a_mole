@@ -48,7 +48,7 @@ function digUp() {
   if (!isBonked && !isUp && posY < 0) {
     //망치를 맞은 직후도, 올라올 수 없는 상태도 아닌데 Y 좌표가 0 이하인 경우 상승
     clearInterval(IntervalId);
-    posY += 0.1;
+    posY += 0.2;
   }
 
   if (posY >= 0) {
