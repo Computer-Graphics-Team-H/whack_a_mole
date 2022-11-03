@@ -48,7 +48,7 @@ function digUp() {
   if (!isBonked && !isUp && posY < 0) {
     //망치를 맞은 직후도, 올라올 수 없는 상태도 아닌데 Y 좌표가 0 이하인 경우 상승
     clearInterval(IntervalId);
-    posY += 0.1;
+    posY += 0.2;
   }
 
   if (posY >= 0) {
@@ -73,7 +73,7 @@ function digUp() {
 }
 
 function bonked() {
-  var randTime = Math.floor(Math.random() * 10000) + 3000; //다시 나오는 딜레이 3초~13초
+  var randTime = Math.floor(Math.random() * 20000) + 5000; //다시 나오는 딜레이 5초~25초
   bonkSound.currentTime = 0;
 
   if (isUp) {
@@ -98,7 +98,7 @@ export default function Diglett(props) {
   const { nodes, materials } = useGLTF("model/diglett copy 2.glb");
   const group = useRef();
   bonkSound.loop = false;
-  var randTime = Math.floor(Math.random() * 10000) + 1000;
+  var randTime = Math.floor(Math.random() * 20000) + 1000;
 
    useFrame(() => {
     changeColor(colors[randColor]);
@@ -107,6 +107,10 @@ export default function Diglett(props) {
     setTimeout(() => {
        digUp();
     }, randTime);
+
+    if(isBonked){
+      clearTimeout(BonkLimitTimeout);
+    }
   });
 
   // 두더지 색 변경 
