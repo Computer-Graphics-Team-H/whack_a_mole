@@ -31,7 +31,7 @@ export default function Attack(){
         }, 3000);
 
         setTimeout(()=>{
-          if (availableAttack == false){
+          if (availableAttack === false){
             setIsShownWarning(false);
             setIsAttack(false);
             return attackSoil
@@ -43,7 +43,7 @@ export default function Attack(){
         setTimeout(()=>{
           setIsShownSoil(true);
           life((prev=>prev-15));
-          if (availableAttack == false){
+          if (availableAttack === false){
             setIsShownSoil(false);
             setIsAttack(false);
             return attackSoil
@@ -65,11 +65,11 @@ export default function Attack(){
     document.addEventListener("keydown", (event)=>{
       const key = event.keyCode
   
-      if (key == 38) { // Up
+      if (key === 38) { // Up
         availableAttack = false
   
         
-      } else if (key == 40) { // Down
+      } else if (key === 40) { // Down
         availableAttack = true
       }
     })
