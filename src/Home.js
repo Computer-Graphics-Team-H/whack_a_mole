@@ -17,10 +17,12 @@ import Diglett6 from "./components/Diglett 5";
 import Diglett7 from "./components/Diglett 6";
 import Diglett8 from "./components/Diglett 7";
 import Diglett9 from "./components/Diglett 8";
+
 import{ Suspense, useRef, useEffect,  } from "react";
 import { ReactDOM } from "react-dom";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { PerspectiveCamera, OrbitControls } from "@react-three/drei";
+
 
 export default function Home() {
   const [isShown, setIsShown] = useState(false);
