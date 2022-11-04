@@ -27,7 +27,7 @@ import MainModal from "./components/MainModal";
 import { lifeState } from "./atom/Life";
 import { playState } from "./atom/Play";
 import { useRecoilState, useResetRecoilState } from "recoil";
-import useInterval from "./components/useInterval";
+import useInterval from "./utils/useInterval";
 import ScoreBar from "./components/ScoreBar";
 import { useNavigate } from "react-router-dom";
 import Attack from "./components/Attack";

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import useInterval from "./useInterval";
+import useInterval from "../utils/useInterval";
 
 import { Progress } from "semantic-ui-react";
 import styled from "styled-components";
