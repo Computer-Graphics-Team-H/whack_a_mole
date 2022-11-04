@@ -12,8 +12,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { ActiveHammer } from "./Cartoon_hammer";
-import Bonksrc from "./bonk_sound.mp3";
-import Laughtersrc from "./diglett_laughter.mp3";
+import Laughtersrc from "../sounds/diglett_laughter.mp3";
 import { lifeState } from "../atom/Life";
 import { useSetRecoilState } from "recoil";
 
@@ -30,14 +29,13 @@ var randColor = 2; // 두더지 종류
 const laughSound = new Audio(Laughtersrc);
 
 function digIn(speed) {
-  //내려가는 애니메이션
   posY = posY - 0.1 * speed;
 
   if (posY <= -4) {
     posY = -4;
 
     if (!isChanged) {
-      randColor = Math.floor(Math.random() * 1000) % 3; //0,1,2
+      randColor = Math.floor(Math.random() * 1000) % 3;
       isChanged = true;
     }
   }
@@ -161,11 +159,13 @@ export default function Diglett(props) {
         geometry={nodes.Object_6.geometry}
         material={myMaterials.Body00}
         skeleton={nodes.Object_6.skeleton}
+        castShadow
       />
       <skinnedMesh
         geometry={nodes.Object_7.geometry}
         material={myMaterials.material}
         skeleton={nodes.Object_7.skeleton}
+        castShadow
       />
     </group>
   );

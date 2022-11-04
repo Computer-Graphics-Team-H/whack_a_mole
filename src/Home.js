@@ -1,20 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Accordion, Icon } from "semantic-ui-react";
-
-import Hole from "./components/Hole";
-import Diglett from "./components/Diglett 0";
-
-import { Suspense } from "react";
-import { Canvas } from "@react-three/fiber";
-import { PerspectiveCamera } from "@react-three/drei";
-import Grass from "./components/Grass";
-import UseInterval from "./utils/useInterval";
-import { Vector3 } from "three";
-import { randomSpherePoint } from "./utils/Animation";
-
-var fois = 0; // MAX 100
 
 export default function Home() {
   const [isShown, setIsShown] = useState(false);

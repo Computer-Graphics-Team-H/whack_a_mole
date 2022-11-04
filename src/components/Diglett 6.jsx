@@ -12,8 +12,8 @@ import React, { useRef, useState } from "react";
 import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { ActiveHammer } from "./Cartoon_hammer";
-import Bonksrc from "./bonk_sound.mp3";
-import Laughtersrc from "./diglett_laughter.mp3";
+
+import Laughtersrc from "../sounds/diglett_laughter.mp3";
 import { lifeState } from "../atom/Life";
 import { useSetRecoilState } from "recoil";
 
@@ -160,11 +160,13 @@ export default function Diglett(props) {
         geometry={nodes.Object_6.geometry}
         material={myMaterials.Body00}
         skeleton={nodes.Object_6.skeleton}
+        castShadow
       />
       <skinnedMesh
         geometry={nodes.Object_7.geometry}
         material={myMaterials.material}
         skeleton={nodes.Object_7.skeleton}
+        castShadow
       />
     </group>
   );

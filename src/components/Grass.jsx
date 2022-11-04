@@ -12,7 +12,7 @@ import { useGLTF } from "@react-three/drei";
 export default function Grass(props) {
   const { nodes, materials } = useGLTF("model/grass.glb");
   return (
-    <group {...props} dispose={null}>
+    <group {...props} dispose={null} receiveShadow>
       <group rotation={[0.11, 0, 0]}>
         <group position={[-6.49, -1.3, -8.14]}>
           <mesh
