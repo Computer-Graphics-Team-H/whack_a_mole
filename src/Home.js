@@ -34,7 +34,6 @@ export default function Home() {
   }
 
   var [isWaving, setIsWaving] = useState(false);
-
   UseInterval(() => {
     if (isWaving) {
       console.log("wave!! " + fois);
@@ -54,7 +53,7 @@ export default function Home() {
   return (
     <HomeWrapper>
       <Title className="title">Whack a mole</Title>
-      <img id="logo" src="/assets/whack-a-mole (6).png" />
+      <img id="logo" src="/assets/whack-a-mole.png" />
       <StartButton to={"/game"}> Start </StartButton>
 
       <Accordion styled>
@@ -77,13 +76,7 @@ export default function Home() {
           Then, Good luck!
         </Accordion.Content>
       </Accordion>
-      <button
-        onClick={() => {
-          setIsWaving(true);
-        }}
-      >
-        hello
-      </button>
+
       <Canvas>
         {/* <OrbitControls /> */}
         <PerspectiveCamera
@@ -95,7 +88,7 @@ export default function Home() {
         <ambientLight intensity={0.5} />
         <spotLight position={[10, 60, 30]} angle={0.2} />
         <Suspense fallback={null}>
-          <Diglett />
+          <Diglett waveCamera={() => setIsWaving(true)} />
           <Grass position={[0, -1, 0]} scale={[5, 5, 5]} />
           <Hole
             position={[0, -0.125, 0]}

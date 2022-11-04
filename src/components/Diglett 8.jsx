@@ -20,7 +20,7 @@ import { useSetRecoilState } from "recoil";
 var isUp = false; //false 상태면 올라오지 않음
 var isBonked = false; //true 상태면 올라오지 않음
 
-var isChanged = false; // 색이 바뀌었는지 
+var isChanged = false; // 색이 바뀌었는지
 var randColor = 2; // 두더지 종류
 
 var posY = -4;
@@ -38,7 +38,7 @@ function digIn(speed) {
     posY = -4;
 
     if (!isChanged) {
-      randColor = Math.floor(Math.random() * 1000) % 3; //0,1,2 
+      randColor = Math.floor(Math.random() * 1000) % 3; //0,1,2
       isChanged = true;
     }
   }
@@ -56,7 +56,7 @@ function digUp() {
     posY = 0;
     isUp = true;
     isBonked = false;
-     isChanged = false;
+    isChanged = false;
 
     BonkLimitTimeout = setTimeout(() => {
       //2초가 지나도 맞지 않으면
@@ -105,15 +105,15 @@ export default function Diglett(props) {
 
     group.current.position.y = posY;
     setTimeout(() => {
-       digUp();
+      digUp();
     }, randTime);
 
-    if(isBonked){
+    if (isBonked) {
       clearTimeout(BonkLimitTimeout);
     }
   });
 
-  // 두더지 색 변경 
+  // 두더지 색 변경
   const colors = ["black", "yellow", "default"];
   const points = [-10, 10, 5];
 
@@ -121,29 +121,29 @@ export default function Diglett(props) {
   function changeColor(color) {
     switch (color) {
       case "black":
-        materials.Body00.color = { isColor: true, r: 0.2, g: 0.2, b: 0.2 }
-        materials.material.color = { isColor: true, r: 0.2, g: 0.2, b: 0.2 }
+        materials.Body00.color = { isColor: true, r: 0.2, g: 0.2, b: 0.2 };
+        materials.material.color = { isColor: true, r: 0.2, g: 0.2, b: 0.2 };
         break;
       case "yellow":
-        materials.Body00.color = { isColor: true, r: 1, g: 1, b: 0 }
-        materials.material.color = { isColor: true, r: 1, g: 1, b: 0 }
+        materials.Body00.color = { isColor: true, r: 1, g: 1, b: 0 };
+        materials.material.color = { isColor: true, r: 1, g: 1, b: 0 };
         break;
       default:
-        materials.Body00.color = { isColor: true, r: 1, g:1, b: 1}
-        materials.material.color = { isColor: true, r: 1, g: 1, b: 1 }
+        materials.Body00.color = { isColor: true, r: 1, g: 1, b: 1 };
+        materials.material.color = { isColor: true, r: 1, g: 1, b: 1 };
     }
     setMyMaterials(materials);
   }
 
-  // HP 바 반영 
+  // HP 바 반영
   const life = useSetRecoilState(lifeState);
   const onBonked = () => {
     bonked();
-     life((prev) => {
-      if (prev + points[randColor] >= 100)
-        return 100
-      else 
-        return prev + points[randColor]
+    props.waveCamera();
+
+    life((prev) => {
+      if (prev + points[randColor] >= 100) return 100;
+      else return prev + points[randColor];
     });
   };
 

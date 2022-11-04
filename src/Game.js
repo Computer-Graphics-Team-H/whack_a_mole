@@ -31,7 +31,10 @@ import useInterval from "./utils/useInterval";
 import ScoreBar from "./components/ScoreBar";
 import { useNavigate } from "react-router-dom";
 import Attack from "./components/Attack";
+import UseInterval from "./utils/useInterval";
+import { randomSpherePoint } from "./utils/Animation";
 
+var fois = 0; // MAX 100
 const Game = () => {
   const bonkSound = new Audio(Bonksrc);
   bonkSound.loop = false;
@@ -102,24 +105,35 @@ const Game = () => {
     }
   });
 
-  const cameraRef = useRef(null);
-  // Camera Recoil
-  function cameraEffect() {
-    console.log(cameraRef.current.position);
+  // Camera Wave
+  const startPos = new Vector3(0, 10, 15);
+  function cameraWave() {
+    const ran = randomSpherePoint(0, 0, 0, 1);
+    const vec = new Vector3(ran[0], ran[1], ran[2]);
+    const newPos = startPos.add(vec);
 
-    // const tween = new TWEEN.Tween(cameraRef.current.position)
-    //   .to([0, 60, 70], 1000)
-    //   .easing(TWEEN.Easing.Bounce.InOut)
-    //   .onUpdate(function () {
-    //     console.log(camera.current.position);
-    //     //cameraRef.current.position.set(cameraRef.current.position);
-    //   })
-    //   .onComplete(function () {
-    //     console.log(camera.current.position);
-    //     //cameraRef.current.position.set(0, 10, 15);
-    //   })
-    //   .start();
-    // tween.update(100);
+    const newCamera = { pov: 90, position: newPos };
+    setCamera(newCamera);
+  }
+
+  var [isWaving, setIsWaving] = useState(false);
+  UseInterval(() => {
+    if (isWaving) {
+      cameraWave(1000, 1);
+      fois += 1;
+
+      if (fois >= 5) {
+        setIsWaving(false);
+        fois = 0;
+      }
+    } else {
+      const newCamera = { pov: 90, position: startPos };
+      setCamera(newCamera);
+    }
+  }, 10);
+
+  function wave() {
+    if (!isWaving) setIsWaving(true);
   }
 
   return (
@@ -135,7 +149,6 @@ const Game = () => {
         {/* <OrbitControls /> */}
         <PerspectiveCamera
           makeDefault
-          ref={cameraRef}
           fov={camera.pov}
           position={camera.position}
           rotation={[(-40 / 180) * Math.PI, 0, 0]}
@@ -145,15 +158,15 @@ const Game = () => {
         <spotLight position={[10, 60, 30]} angle={0.2} />
         <Suspense fallback={null}>
           <Hammer2 />
-          <Diglett />
-          <Diglett2 />
-          <Diglett3 />
-          <Diglett4 />
-          <Diglett5 />
-          <Diglett6 />
-          <Diglett7 />
-          <Diglett8 />
-          <Diglett9 />
+          <Diglett waveCamera={() => wave()} />
+          <Diglett2 waveCamera={() => wave()} />
+          <Diglett3 waveCamera={() => wave()} />
+          <Diglett4 waveCamera={() => wave()} />
+          <Diglett5 waveCamera={() => wave()} />
+          <Diglett6 waveCamera={() => wave()} />
+          <Diglett7 waveCamera={() => wave()} />
+          <Diglett8 waveCamera={() => wave()} />
+          <Diglett9 waveCamera={() => wave()} />
           <Grass position={[0, -1, 0]} scale={[5, 5, 5]} />
           <Hole
             position={[0, -0.125, 0]}
@@ -205,7 +218,6 @@ const Game = () => {
         </Suspense>
       </Canvas>
       <Attack />
-      <button onClick={cameraEffect}>hello</button>
     </GameWrapper>
   );
 };
