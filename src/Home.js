@@ -1,28 +1,20 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import MainModal from "./components/MainModal";
 import { Accordion, Icon } from "semantic-ui-react";
-import LifeBar from "./components/LifeBar";
-import ScoreBar from "./components/ScoreBar";
 
-import Hammer2 from "./components/Cartoon_hammer";
 import Hole from "./components/Hole";
 import Diglett from "./components/Diglett 0";
-import Diglett2 from "./components/Diglett 1";
-import Diglett3 from "./components/Diglett 2";
-import Diglett4 from "./components/Diglett 3";
-import Diglett5 from "./components/Diglett 4";
-import Diglett6 from "./components/Diglett 5";
-import Diglett7 from "./components/Diglett 6";
-import Diglett8 from "./components/Diglett 7";
-import Diglett9 from "./components/Diglett 8";
 
-import{ Suspense, useRef, useEffect,  } from "react";
-import { ReactDOM } from "react-dom";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { PerspectiveCamera, OrbitControls } from "@react-three/drei";
+import { Suspense } from "react";
+import { Canvas } from "@react-three/fiber";
+import { PerspectiveCamera } from "@react-three/drei";
+import Grass from "./components/Grass";
+import UseInterval from "./utils/useInterval";
+import { Vector3 } from "three";
+import { randomSpherePoint } from "./utils/Animation";
 
+var fois = 0; // MAX 100
 
 export default function Home() {
   const [isShown, setIsShown] = useState(false);
@@ -30,7 +22,7 @@ export default function Home() {
   return (
     <HomeWrapper>
       <Title className="title">Whack a mole</Title>
-      <img id="logo" src="/assets/whack-a-mole (6).png" />
+      <img id="logo" src="/assets/whack-a-mole.png" />
       <StartButton to={"/game"}> Start </StartButton>
 
       <Accordion styled>
@@ -43,8 +35,7 @@ export default function Home() {
           <Icon name="dropdown" />
           How to play?
         </Accordion.Title>
-        <Accordion.Content active={isShown}
-        className="accordion_content">
+        <Accordion.Content active={isShown} className="accordion_content">
           ⏳ Your hp decrease according to time
           <br /> 🔨 You can catch mole with your hammer
           <br /> 📸 Avoid the attacking mole by changing the camera's point of
@@ -60,7 +51,7 @@ export default function Home() {
 
 const HomeWrapper = styled.div`
   width: 100%;
-  height:100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -72,8 +63,9 @@ const HomeWrapper = styled.div`
     margin: 20px 0 50px 0;
   }
 
-  .accordion_title, .accordion_content{
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+  .accordion_title,
+  .accordion_content {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   }
 `;
 
