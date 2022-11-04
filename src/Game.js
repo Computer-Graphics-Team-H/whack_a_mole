@@ -37,6 +37,8 @@ import UseInterval from "./utils/useInterval";
 import { randomSpherePoint } from "./utils/Animation";
 
 var fois = 0; // MAX 100
+const dt = 1.5;
+
 const bonkSound = new Audio(Bonksrc);
 const soilSound = new Audio(SoilSrc);
 
@@ -95,7 +97,12 @@ const Game = () => {
   };
 
   // Camera
-  const [camera, setCamera] = useState({ pov: 90, position: [0, 10, 15] });
+  const [camera, setCamera] = useState({
+    pov: 90,
+    position: [0, 10, 15],
+    intensity: 0.5,
+  });
+
   document.addEventListener("keydown", (event) => {
     const key = event.keyCode;
 
@@ -117,7 +124,10 @@ const Game = () => {
     const vec = new Vector3(ran[0], ran[1], ran[2]);
     const newPos = startPos.add(vec);
 
-    const newCamera = { pov: 90, position: newPos };
+    const newIntensity =
+      fois <= 5 ? camera.intensity + dt : camera.intensity - dt;
+
+    const newCamera = { pov: 90, position: newPos, intensity: newIntensity };
     setCamera(newCamera);
   }
 
@@ -127,12 +137,12 @@ const Game = () => {
       cameraWave(1000, 1);
       fois += 1;
 
-      if (fois >= 5) {
+      if (fois >= 10) {
         setIsWaving(false);
         fois = 0;
       }
     } else {
-      const newCamera = { pov: 90, position: startPos };
+      const newCamera = { pov: 90, position: startPos, intensity: 0.5 };
       setCamera(newCamera);
     }
   }, 10);
@@ -178,7 +188,7 @@ const Game = () => {
           rotation={[(-40 / 180) * Math.PI, 0, 0]}
           lookAt={new Vector3(0, 0, 0)}
         />
-        <ambientLight intensity={0.5} />
+        <ambientLight intensity={camera.intensity} color={"80FFFFFF"} />
         <spotLight position={[10, 60, 30]} angle={0.2} />
         <Suspense fallback={null}>
           <Hammer2 />
