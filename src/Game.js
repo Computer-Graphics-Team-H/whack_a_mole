@@ -1,4 +1,4 @@
-import React, { Suspense, useState, useRef } from "react";
+import React, { Suspense, useState, useRef, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import "./styles/game.css";
 import styled from "styled-components";
@@ -16,13 +16,15 @@ import Diglett6 from "./components/Diglett 5";
 import Diglett7 from "./components/Diglett 6";
 import Diglett8 from "./components/Diglett 7";
 import Diglett9 from "./components/Diglett 8";
-import Bonksrc from "./components/bonk_sound.mp3";
-import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
+import { PerspectiveCamera } from "@react-three/drei";
 import Grass from "./components/Grass";
 import { Vector3 } from "three";
 
 import LifeBar from "./components/LifeBar";
 import MainModal from "./components/MainModal";
+
+import Bonksrc from "./components/bonk_sound.mp3";
+import SoilSrc from "./components/soil_sound.mp3";
 
 import { lifeState } from "./atom/Life";
 import { playState } from "./atom/Play";
@@ -35,9 +37,12 @@ import UseInterval from "./utils/useInterval";
 import { randomSpherePoint } from "./utils/Animation";
 
 var fois = 0; // MAX 100
+const bonkSound = new Audio(Bonksrc);
+const soilSound = new Audio(SoilSrc);
+
 const Game = () => {
-  const bonkSound = new Audio(Bonksrc);
   bonkSound.loop = false;
+  soilSound.loop = false;
 
   const [life, setLife] = useRecoilState(lifeState);
   const resetLife = useResetRecoilState(lifeState);
@@ -105,7 +110,7 @@ const Game = () => {
     }
   });
 
-  // Camera Wave
+  // Camera - Wave
   const startPos = new Vector3(0, 10, 15);
   function cameraWave() {
     const ran = randomSpherePoint(0, 0, 0, 1);
@@ -136,6 +141,25 @@ const Game = () => {
     if (!isWaving) setIsWaving(true);
   }
 
+  // Sound Effect
+  function playSoilSound() {
+    soilSound.currentTime = 0;
+    soilSound.play();
+  }
+
+  function playBonkSound() {
+    bonkSound.currentTime = 0;
+    bonkSound.play();
+  }
+
+  // Clean code
+  useEffect(() => {
+    return () => {
+      resetLife();
+      resetPlaying();
+    };
+  }, []);
+
   return (
     <GameWrapper id="game">
       <MainModal />
@@ -158,15 +182,60 @@ const Game = () => {
         <spotLight position={[10, 60, 30]} angle={0.2} />
         <Suspense fallback={null}>
           <Hammer2 />
-          <Diglett waveCamera={() => wave()} />
-          <Diglett2 waveCamera={() => wave()} />
-          <Diglett3 waveCamera={() => wave()} />
-          <Diglett4 waveCamera={() => wave()} />
-          <Diglett5 waveCamera={() => wave()} />
-          <Diglett6 waveCamera={() => wave()} />
-          <Diglett7 waveCamera={() => wave()} />
-          <Diglett8 waveCamera={() => wave()} />
-          <Diglett9 waveCamera={() => wave()} />
+          <Diglett
+            waveCamera={() => wave()}
+            playBonkSound={() => {
+              playBonkSound();
+            }}
+          />
+          <Diglett2
+            waveCamera={() => wave()}
+            playBonkSound={() => {
+              playBonkSound();
+            }}
+          />
+          <Diglett3
+            waveCamera={() => wave()}
+            playBonkSound={() => {
+              playBonkSound();
+            }}
+          />
+          <Diglett4
+            waveCamera={() => wave()}
+            playBonkSound={() => {
+              playBonkSound();
+            }}
+          />
+          <Diglett5
+            waveCamera={() => wave()}
+            playBonkSound={() => {
+              playBonkSound();
+            }}
+          />
+          <Diglett6
+            waveCamera={() => wave()}
+            playBonkSound={() => {
+              playBonkSound();
+            }}
+          />
+          <Diglett7
+            waveCamera={() => wave()}
+            playBonkSound={() => {
+              playBonkSound();
+            }}
+          />
+          <Diglett8
+            waveCamera={() => wave()}
+            playBonkSound={() => {
+              playBonkSound();
+            }}
+          />
+          <Diglett9
+            waveCamera={() => wave()}
+            playBonkSound={() => {
+              playBonkSound();
+            }}
+          />
           <Grass position={[0, -1, 0]} scale={[5, 5, 5]} />
           <Hole
             position={[0, -0.125, 0]}
@@ -217,7 +286,11 @@ const Game = () => {
           />
         </Suspense>
       </Canvas>
-      <Attack />
+      <Attack
+        playSoilSound={() => {
+          playSoilSound();
+        }}
+      />
     </GameWrapper>
   );
 };

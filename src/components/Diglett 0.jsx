@@ -27,7 +27,6 @@ var BonkLimitTimeout;
 var isChanged = false; // 색이 바뀌었는지
 var randColor = 2; // 두더지 종류
 
-const bonkSound = new Audio(Bonksrc);
 const laughSound = new Audio(Laughtersrc);
 
 function digIn(speed) {
@@ -72,9 +71,8 @@ function digUp() {
   }
 }
 
-function bonked() {
+function bonked(props) {
   var randTime = Math.floor(Math.random() * 20000) + 5000; //다시 나오는 딜레이 5초~25초
-  bonkSound.currentTime = 0;
 
   if (isUp) {
     isBonked = true;
@@ -82,7 +80,10 @@ function bonked() {
       digIn(7);
     }, 1);
     ActiveHammer(0);
-    bonkSound.play();
+
+    props.waveCamera();
+    props.playBonkSound();
+
     clearTimeout(BonkLimitTimeout);
     //score 계산 함수
     setTimeout(() => {
@@ -97,7 +98,6 @@ function bonked() {
 export default function Diglett(props) {
   const { nodes, materials } = useGLTF("model/diglett.glb");
   const group = useRef();
-  bonkSound.loop = false;
 
   var randTime = Math.floor(Math.random() * 20000) + 1000;
 
@@ -139,8 +139,7 @@ export default function Diglett(props) {
   // HP 바 반영
   const life = useSetRecoilState(lifeState);
   const onBonked = () => {
-    bonked();
-    props.waveCamera();
+    bonked(props);
 
     life((prev) => {
       if (prev + points[randColor] >= 100) return 100;

@@ -12,7 +12,7 @@ import SoilSrc from "./soil_sound.mp3";
 var availableAttack = true;
 const soilSound = new Audio(SoilSrc);
 
-export default function Attack() {
+export default function Attack(props) {
   soilSound.loop = false;
 
   const [isShownWarning, setIsShownWarning] = useState(false);
@@ -23,8 +23,6 @@ export default function Attack() {
   const [isAttack, setIsAttack] = useRecoilState(attackState);
 
   function attackSoil() {
-    soilSound.currentTime = 0;
-
     setIsAttack(true);
     setTimeout(() => {
       if (availableAttack === false) {
@@ -48,8 +46,7 @@ export default function Attack() {
 
     setTimeout(() => {
       if (availableAttack == true) {
-        // Sound
-        soilSound.play();
+        props.playSoilSound(); // play Sound
 
         setIsShownSoil(true);
         setIsAttack(true);
