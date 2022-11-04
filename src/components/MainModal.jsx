@@ -11,17 +11,17 @@ export default function MainModal() {
   const [playing, setPlaying] = useRecoilState(playState);
 
   function closeModal() {
-    if (playing.isReady) {
-      setOpen(false);
-      setPlaying((prev) => {
-        const variable = { ...prev };
-        variable.isPlaying = true;
+    // if (playing.isReady) {
+    setOpen(false);
+    setPlaying((prev) => {
+      const variable = { ...prev };
+      variable.isPlaying = true;
 
-        return { ...variable };
-      });
-    } else {
-      alert("Canvas is loading...");
-    }
+      return { ...variable };
+    });
+    //} else {
+    //  alert("Canvas is loading...");
+    //}
   }
 
   return (

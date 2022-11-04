@@ -161,11 +161,13 @@ export default function Diglett(props) {
         geometry={nodes.Object_6.geometry}
         material={myMaterials.Body00}
         skeleton={nodes.Object_6.skeleton}
+        castShadow
       />
       <skinnedMesh
         geometry={nodes.Object_7.geometry}
         material={myMaterials.material}
         skeleton={nodes.Object_7.skeleton}
+        castShadow
       />
     </group>
   );

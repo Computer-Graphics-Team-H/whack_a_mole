@@ -3,10 +3,6 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Accordion, Icon } from "semantic-ui-react";
 
-import StartBGMSrc from "./sounds/start_bgm.mp3";
-
-const startBGM = new Audio(StartBGMSrc);
-
 export default function Home() {
   const [isShown, setIsShown] = useState(false);
 
@@ -36,8 +32,6 @@ export default function Home() {
           Then, Good luck!
         </Accordion.Content>
       </Accordion>
-
-      <img id="soil" src="/assets/soil.png" />
     </HomeWrapper>
   );
 }

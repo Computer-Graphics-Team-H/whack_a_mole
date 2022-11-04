@@ -90,50 +90,29 @@ const Game = () => {
     playing.isPlaying ? 1000 : null
   );
 
-  // Canvas Ready Callback
-  const onCanvasReady = () => {
-    resetLife();
-    setPlaying((prev) => {
-      const variable = { ...prev };
-      variable.isReady = true;
-
-      return { ...variable };
-    });
-  };
-
   // Camera
   const [camera, setCamera] = useState({
-    pov: 20,
-    position: [0, 60, 70],
+    pov: 90,
+    position: [0, 10, 15],
     intensity: 0.5,
   });
 
-  const keyPress = useCallback(
-    (event) => {
-      const key = event.keyCode;
-
-      console.log(key);
-      if (key == 38) {
-        // Up
+  useEffect(() => {
+    const callback = (event) => {
+      if (event.key == "ArrowUp") {
         const newCamera = { pov: 20, position: [0, 60, 70], intensity: 0.5 };
         setCamera(newCamera);
-
-        console.log("up");
-      } else if (key == 40) {
-        // Down
+      } else if (event.key == "ArrowDown") {
         const newCamera = { pov: 90, position: [0, 10, 15], intensity: 0.5 };
         setCamera(newCamera);
-        console.log("down");
       }
-    },
-    [camera]
-  );
+    };
+    document.addEventListener("keydown", callback);
 
-  useEffect(() => {
-    document.addEventListener("keydown", keyPress);
-
-    return () => document.removeEventListener("keydown", keyPress);
-  }, [keyPress]);
+    return () => {
+      document.removeEventListener("keydown", callback);
+    };
+  }, []);
 
   // Camera - Wave
   const startPos = new Vector3(0, 10, 15);
@@ -145,7 +124,11 @@ const Game = () => {
     const newIntensity =
       fois <= 5 ? camera.intensity + dt : camera.intensity - dt;
 
-    const newCamera = { pov: 90, position: newPos, intensity: newIntensity };
+    const newCamera = {
+      pov: 90,
+      position: [newPos.x, newPos.y, newPos.z],
+      intensity: newIntensity,
+    };
     setCamera(newCamera);
   }
 
@@ -156,12 +139,16 @@ const Game = () => {
       fois += 1;
 
       if (fois >= 10) {
+        const newCamera = {
+          pov: 90,
+          position: [startPos.x, startPos.y, startPos.z],
+          intensity: 0.5,
+        };
+        setCamera(newCamera);
+
         setIsWaving(false);
         fois = 0;
       }
-    } else {
-      const newCamera = { pov: 90, position: startPos, intensity: 0.5 };
-      setCamera(newCamera);
     }
   }, 10);
 
@@ -192,7 +179,7 @@ const Game = () => {
     <GameWrapper id="game">
       <MainModal />
 
-      <Canvas id="canvas" onCreated={() => onCanvasReady()}>
+      <Canvas id="canvas" shadowMap colorManagement>
         {/* <OrbitControls /> */}
         <PerspectiveCamera
           makeDefault
@@ -201,65 +188,74 @@ const Game = () => {
           rotation={[(-40 / 180) * Math.PI, 0, 0]}
           lookAt={new Vector3(0, 0, 0)}
         />
-        <ambientLight intensity={camera.intensity} color={"80FFFFFF"} />
-        <spotLight position={[10, 60, 30]} angle={0.2} />
+        <ambientLight intensity={camera.intensity} color={0x909090} />
+        <spotLight castShadow position={[10, 60, 30]} angle={0.2} />
         <Suspense fallback={null}>
-          <Hammer2 />
+          <Hammer2 castShadow />
           <Diglett
+            castShadow
             waveCamera={() => wave()}
             playBonkSound={() => {
               playBonkSound();
             }}
           />
           <Diglett2
+            castShadow
             waveCamera={() => wave()}
             playBonkSound={() => {
               playBonkSound();
             }}
           />
           <Diglett3
+            castShadow
             waveCamera={() => wave()}
             playBonkSound={() => {
               playBonkSound();
             }}
           />
           <Diglett4
+            castShadow
             waveCamera={() => wave()}
             playBonkSound={() => {
               playBonkSound();
             }}
           />
           <Diglett5
+            castShadow
             waveCamera={() => wave()}
             playBonkSound={() => {
               playBonkSound();
             }}
           />
           <Diglett6
+            castShadow
             waveCamera={() => wave()}
             playBonkSound={() => {
               playBonkSound();
             }}
           />
           <Diglett7
+            castShadow
             waveCamera={() => wave()}
             playBonkSound={() => {
               playBonkSound();
             }}
           />
           <Diglett8
+            castShadow
             waveCamera={() => wave()}
             playBonkSound={() => {
               playBonkSound();
             }}
           />
           <Diglett9
+            castShadow
             waveCamera={() => wave()}
             playBonkSound={() => {
               playBonkSound();
             }}
           />
-          <Grass position={[0, -1, 0]} scale={[5, 5, 5]} />
+          <Grass receiveShadow position={[0, -1, 0]} scale={[5, 5, 5]} />
           <Hole
             position={[0, -0.125, 0]}
             scale={[3, 3, 3]}
