@@ -1,4 +1,10 @@
-import React, { Suspense, useState, useRef, useEffect } from "react";
+import React, {
+  Suspense,
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+} from "react";
 import { Canvas } from "@react-three/fiber";
 import "./styles/game.css";
 import styled from "styled-components";
@@ -53,14 +59,13 @@ const Game = () => {
   const resetPlaying = useResetRecoilState(playState);
 
   const navigate = useNavigate();
-  // HP decrease interval 1s. ** 후에 흙뿌리기랑 감안해서 속도 조정
+  // HP decrease interval 1s.
   useInterval(
     () => {
       if (life <= 0) {
         // Game Over
         const score = playing.time;
         navigate("/gameover", { state: score });
-        console.log(playing.time);
         resetPlaying();
 
         return;
@@ -98,24 +103,37 @@ const Game = () => {
 
   // Camera
   const [camera, setCamera] = useState({
-    pov: 90,
-    position: [0, 10, 15],
+    pov: 20,
+    position: [0, 60, 70],
     intensity: 0.5,
   });
 
-  document.addEventListener("keydown", (event) => {
-    const key = event.keyCode;
+  const keyPress = useCallback(
+    (event) => {
+      const key = event.keyCode;
 
-    if (key === 38) {
-      // Up
-      const newCamera = { pov: 20, position: [0, 60, 70] };
-      setCamera(newCamera);
-    } else if (key === 40) {
-      // Down
-      const newCamera = { pov: 90, position: [0, 10, 15] };
-      setCamera(newCamera);
-    }
-  });
+      console.log(key);
+      if (key == 38) {
+        // Up
+        const newCamera = { pov: 20, position: [0, 60, 70], intensity: 0.5 };
+        setCamera(newCamera);
+
+        console.log("up");
+      } else if (key == 40) {
+        // Down
+        const newCamera = { pov: 90, position: [0, 10, 15], intensity: 0.5 };
+        setCamera(newCamera);
+        console.log("down");
+      }
+    },
+    [camera]
+  );
+
+  useEffect(() => {
+    document.addEventListener("keydown", keyPress);
+
+    return () => document.removeEventListener("keydown", keyPress);
+  }, [keyPress]);
 
   // Camera - Wave
   const startPos = new Vector3(0, 10, 15);
@@ -174,12 +192,7 @@ const Game = () => {
     <GameWrapper id="game">
       <MainModal />
 
-      <PlayInfoWrapper>
-        <LifeBar />
-        <ScoreBar />
-      </PlayInfoWrapper>
-
-      <Canvas onCreated={() => onCanvasReady()}>
+      <Canvas id="canvas" onCreated={() => onCanvasReady()}>
         {/* <OrbitControls /> */}
         <PerspectiveCamera
           makeDefault
@@ -296,11 +309,17 @@ const Game = () => {
           />
         </Suspense>
       </Canvas>
+
       <Attack
         playSoilSound={() => {
           playSoilSound();
         }}
       />
+
+      <PlayInfoWrapper>
+        <LifeBar />
+        <ScoreBar />
+      </PlayInfoWrapper>
     </GameWrapper>
   );
 };
@@ -309,6 +328,11 @@ const Game = () => {
 export default Game;
 
 const PlayInfoWrapper = styled.div`
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+
   display: flex;
   flex-direction: row;
   justify-content: space-between;

@@ -6,6 +6,8 @@ import { useSetRecoilState } from "recoil";
 import { lifeState } from "../atom/Life";
 import { attackState } from "../atom/Time";
 import { useRecoilState } from "recoil";
+import { useEffect } from "react";
+import { useCallback } from "react";
 
 var availableAttack = true;
 
@@ -58,17 +60,29 @@ export default function Attack(props) {
 
   UseInterval(attackSoil, time * 1000);
 
-  document.addEventListener("keydown", (event) => {
-    const key = event.keyCode;
+  const keyPress = useCallback(
+    (event) => {
+      const key = event.keyCode;
+      console.log("attack - " + key);
 
-    if (key === 38) {
-      // Up
-      availableAttack = false;
-    } else if (key === 40) {
-      // Down
-      availableAttack = true;
-    }
-  });
+      if (key == 38) {
+        // Up
+        availableAttack = false;
+        console.log("attack - " + " up ");
+      } else if (key == 40) {
+        // Down
+        availableAttack = true;
+        console.log("attack - " + " down ");
+      }
+    },
+    [availableAttack]
+  );
+
+  useEffect(() => {
+    document.addEventListener("keydown", keyPress);
+
+    return () => document.removeEventListener("keydown", keyPress);
+  }, [keyPress]);
 
   return (
     <AttackDiv>
@@ -90,6 +104,9 @@ const AttackDiv = styled.div`
   }
 
   #soil {
+    position: absolute;
+    left: 0;
+    top: 0;
     width: 100vw;
     height: 100vh;
   }

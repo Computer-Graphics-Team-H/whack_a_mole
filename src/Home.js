@@ -36,6 +36,8 @@ export default function Home() {
           Then, Good luck!
         </Accordion.Content>
       </Accordion>
+
+      <img id="soil" src="/assets/soil.png" />
     </HomeWrapper>
   );
 }

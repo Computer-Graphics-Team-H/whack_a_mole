@@ -29,14 +29,13 @@ var randColor = 2; // 두더지 종류
 const laughSound = new Audio(Laughtersrc);
 
 function digIn(speed) {
-  //내려가는 애니메이션
   posY = posY - 0.1 * speed;
 
   if (posY <= -4) {
     posY = -4;
 
     if (!isChanged) {
-      randColor = Math.floor(Math.random() * 1000) % 3; //0,1,2
+      randColor = Math.floor(Math.random() * 1000) % 3;
       isChanged = true;
     }
   }
