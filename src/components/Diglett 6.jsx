@@ -8,7 +8,7 @@ title: Diglett
 
 //(-1, -1) diglett
 
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { ActiveHammer } from "./Cartoon_hammer";
@@ -16,102 +16,98 @@ import { ActiveHammer } from "./Cartoon_hammer";
 import Laughtersrc from "../sounds/diglett_laughter.mp3";
 import { lifeState } from "../atom/Life";
 import { useSetRecoilState } from "recoil";
+import * as TWEEN from "@tweenjs/tween.js";
 
-var isUp = false; //false 상태면 올라오지 않음
-var isBonked = false; //true 상태면 올라오지 않음
+var pos = { x: 0, y: -4, z: 0 }; //두더지 위치
+var posY;
 
-var posY = -4;
-var IntervalId;
-var BonkLimitTimeout;
+var toZero = new TWEEN.Tween(pos)
+  .to({ x: 0, y: 0, z: 0 }, 500)
+  .easing(TWEEN.Easing.Elastic.Out)
+  .onUpdate(() => {
+    posY = pos.y;
+  });
+var toUnder = new TWEEN.Tween(pos)
+  .to({ x: 0, y: -4, z: 0 }, 100)
+  .easing(TWEEN.Easing.Quartic.Out)
+  .onUpdate(() => {
+    posY = pos.y;
+  });
 
-var isChanged = false; // 색이 바뀌었는지
-var randColor = 2; // 두더지 종류
+var isUp = false; //올라와 있는지
+var BonkLimitTimeout; //망치에 맞지 않은 두더지가 들어가는 Timeout의 ID
+var randColor = Math.floor(Math.random() * 1000) % 3; // 두더지 종류
 
-const laughSound = new Audio(Laughtersrc);
-
-function digIn(speed) {
-  //내려가는 애니메이션
-  posY = posY - 0.1 * speed;
-
-  if (posY <= -4) {
-    posY = -4;
-
-    if (!isChanged) {
-      randColor = Math.floor(Math.random() * 1000) % 3; //0,1,2
-      isChanged = true;
-    }
-  }
+function digIn() {
+  toZero.stop();
+  toUnder
+    .onComplete(() => {
+      waiting();
+      isUp = false;
+    })
+    .start();
 }
 
 function digUp() {
-  if (!isBonked && !isUp && posY < 0) {
-    //망치를 맞은 직후도, 올라올 수 없는 상태도 아닌데 Y 좌표가 0 이하인 경우 상승
-    clearInterval(IntervalId);
-    posY += 0.2;
-  }
+  if (!isUp) {
+    // 올라와 있지 않은 경우에만 가능
+    toUnder.stop();
+    toZero
+      .onStart(() => {
+        randColor = Math.floor(Math.random() * 1000) % 3;
+      })
+      .onComplete(() => {
+        isUp = true;
 
-  if (posY >= 0) {
-    //Y 좌표가 0에 도달하면
-    posY = 0;
-    isUp = true;
-    isBonked = false;
-    isChanged = false;
-
-    BonkLimitTimeout = setTimeout(() => {
-      //2초가 지나도 맞지 않으면
-      if (!isBonked) {
-        // laughSound.play();
-        digIn(2);
-        setTimeout(() => {
-          isUp = false;
-        }, 5000);
-        //score 계산 함수
-      }
-    }, 2000);
+        //2초가 지나도 맞지 않으면
+        BonkLimitTimeout = setTimeout(() => {
+          digIn();
+        }, 2000);
+      })
+      .start();
   }
 }
 
 function bonked(props) {
-  var randTime = Math.floor(Math.random() * 20000) + 5000; //다시 나오는 딜레이 5초~25초
-
   if (isUp) {
-    isBonked = true;
-    IntervalId = setInterval(() => {
-      digIn(7);
-    }, 1);
+    digIn();
     ActiveHammer(6);
 
+    //효과음
     props.waveCamera();
     props.playBonkSound();
 
+    //망치에 맞았으니 그냥 들어가는 대기 초기화
     clearTimeout(BonkLimitTimeout);
-    //score 계산 함수
-    setTimeout(() => {
-      isUp = false;
-      isBonked = false;
-    }, randTime);
-  } else {
-    //score 계산 함수
   }
+}
+
+function waiting() {
+  var randTime = Math.floor(Math.random() * 20000) + 5000; //다시 나오는 딜레이 5초~25초(5000~25000)
+
+  setTimeout(() => {
+    digUp();
+  }, randTime);
 }
 
 export default function Diglett(props) {
   const { nodes, materials } = useGLTF("model/diglett copy 6.glb");
   const group = useRef();
 
-  var randTime = Math.floor(Math.random() * 20000) + 1000;
+  // 처음에 한번만 실행
+  var randTime = Math.floor(Math.random() * 10000) + 1000;
+  useEffect(() => {
+    setTimeout(() => {
+      digUp();
+    }, randTime);
+  }, []);
 
   useFrame(() => {
     changeColor(colors[randColor]);
 
     group.current.position.y = posY;
-    setTimeout(() => {
-      digUp();
-    }, randTime);
-
-    if (isBonked) {
-      clearTimeout(BonkLimitTimeout);
-    }
+    if (toZero.isPlaying) toZero.update();
+    if (toUnder.isPlaying) toUnder.update();
   });
 
   // 두더지 색 변경
@@ -160,13 +156,11 @@ export default function Diglett(props) {
         geometry={nodes.Object_6.geometry}
         material={myMaterials.Body00}
         skeleton={nodes.Object_6.skeleton}
-        castShadow
       />
       <skinnedMesh
         geometry={nodes.Object_7.geometry}
         material={myMaterials.material}
         skeleton={nodes.Object_7.skeleton}
-        castShadow
       />
     </group>
   );
