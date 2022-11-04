@@ -7,14 +7,9 @@ import { lifeState } from "../atom/Life";
 import { attackState } from "../atom/Time";
 import { useRecoilState } from "recoil";
 
-import SoilSrc from "./soil_sound.mp3";
-
 var availableAttack = true;
-const soilSound = new Audio(SoilSrc);
 
 export default function Attack(props) {
-  soilSound.loop = false;
-
   const [isShownWarning, setIsShownWarning] = useState(false);
   const [isShownSoil, setIsShownSoil] = useState(false);
 

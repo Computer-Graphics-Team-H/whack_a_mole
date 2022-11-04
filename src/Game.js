@@ -23,8 +23,8 @@ import { Vector3 } from "three";
 import LifeBar from "./components/LifeBar";
 import MainModal from "./components/MainModal";
 
-import Bonksrc from "./components/bonk_sound.mp3";
-import SoilSrc from "./components/soil_sound.mp3";
+import Bonksrc from "./sounds/bonk_sound.mp3";
+import SoilSrc from "./sounds/soil_sound.mp3";
 
 import { lifeState } from "./atom/Life";
 import { playState } from "./atom/Play";

@@ -12,8 +12,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { ActiveHammer } from "./Cartoon_hammer";
-import Bonksrc from "./bonk_sound.mp3";
-import Laughtersrc from "./diglett_laughter.mp3";
+import Laughtersrc from "../sounds/diglett_laughter.mp3";
 import { lifeState } from "../atom/Life";
 import { useSetRecoilState } from "recoil";
 
