@@ -179,7 +179,7 @@ const Game = () => {
     <GameWrapper id="game">
       <MainModal />
 
-      <Canvas id="canvas" shadowMap colorManagement>
+      <Canvas id="canvas">
         {/* <OrbitControls /> */}
         <PerspectiveCamera
           makeDefault
@@ -189,73 +189,64 @@ const Game = () => {
           lookAt={new Vector3(0, 0, 0)}
         />
         <ambientLight intensity={camera.intensity} color={0x909090} />
-        <spotLight castShadow position={[10, 60, 30]} angle={0.2} />
+        <spotLight position={[10, 60, 30]} angle={0.2} />
         <Suspense fallback={null}>
-          <Hammer2 castShadow />
+          <Hammer2 />
           <Diglett
-            castShadow
             waveCamera={() => wave()}
             playBonkSound={() => {
               playBonkSound();
             }}
           />
           <Diglett2
-            castShadow
             waveCamera={() => wave()}
             playBonkSound={() => {
               playBonkSound();
             }}
           />
           <Diglett3
-            castShadow
             waveCamera={() => wave()}
             playBonkSound={() => {
               playBonkSound();
             }}
           />
           <Diglett4
-            castShadow
             waveCamera={() => wave()}
             playBonkSound={() => {
               playBonkSound();
             }}
           />
           <Diglett5
-            castShadow
             waveCamera={() => wave()}
             playBonkSound={() => {
               playBonkSound();
             }}
           />
           <Diglett6
-            castShadow
             waveCamera={() => wave()}
             playBonkSound={() => {
               playBonkSound();
             }}
           />
           <Diglett7
-            castShadow
             waveCamera={() => wave()}
             playBonkSound={() => {
               playBonkSound();
             }}
           />
           <Diglett8
-            castShadow
             waveCamera={() => wave()}
             playBonkSound={() => {
               playBonkSound();
             }}
           />
           <Diglett9
-            castShadow
             waveCamera={() => wave()}
             playBonkSound={() => {
               playBonkSound();
             }}
           />
-          <Grass receiveShadow position={[0, -1, 0]} scale={[5, 5, 5]} />
+          <Grass position={[0, -1, 0]} scale={[5, 5, 5]} />
           <Hole
             position={[0, -0.125, 0]}
             scale={[3, 3, 3]}
