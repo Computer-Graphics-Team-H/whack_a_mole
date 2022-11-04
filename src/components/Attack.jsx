@@ -7,9 +7,14 @@ import { lifeState } from "../atom/Life";
 import { attackState } from "../atom/Time";
 import { useRecoilState } from "recoil";
 
+import SoilSrc from "./soil_sound.mp3";
+
 var availableAttack = true;
+const soilSound = new Audio(SoilSrc);
 
 export default function Attack() {
+  soilSound.loop = false;
+
   const [isShownWarning, setIsShownWarning] = useState(false);
   const [isShownSoil, setIsShownSoil] = useState(false);
 
@@ -18,6 +23,8 @@ export default function Attack() {
   const [isAttack, setIsAttack] = useRecoilState(attackState);
 
   function attackSoil() {
+    soilSound.currentTime = 0;
+
     setIsAttack(true);
     setTimeout(() => {
       if (availableAttack === false) {
@@ -41,6 +48,9 @@ export default function Attack() {
 
     setTimeout(() => {
       if (availableAttack == true) {
+        // Sound
+        soilSound.play();
+
         setIsShownSoil(true);
         setIsAttack(true);
         life((prev) => prev - 15);
