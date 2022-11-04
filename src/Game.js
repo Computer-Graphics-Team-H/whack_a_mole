@@ -1,7 +1,9 @@
-import React, { Suspense, useState } from "react";
-import { Canvas} from "@react-three/fiber";
+import React, { Suspense, useState, useRef } from "react";
+import { Canvas } from "@react-three/fiber";
 import "./styles/game.css";
 import styled from "styled-components";
+import * as THREE from "three";
+import * as TWEEN from "@tweenjs/tween.js";
 
 import Hammer2 from "./components/Cartoon_hammer";
 import Hole from "./components/Hole";
@@ -29,37 +31,31 @@ import useInterval from "./components/useInterval";
 import ScoreBar from "./components/ScoreBar";
 import { useNavigate } from "react-router-dom";
 import Attack from "./components/Attack";
-import { attackState } from "./atom/Time";
 
 const Game = () => {
-  const [coords, setCoords] = useState({ x: 0, y: 0 });
-  const[isAttack, setIsAttack] = useRecoilState(attackState);
-
   const bonkSound = new Audio(Bonksrc);
   bonkSound.loop = false;
-
-  const [upKeyPressed, setUpKeyPressed] = useState(false);
 
   const [life, setLife] = useRecoilState(lifeState);
   const resetLife = useResetRecoilState(lifeState);
 
   const [playing, setPlaying] = useRecoilState(playState);
   const resetPlaying = useResetRecoilState(playState);
-  
+
   const navigate = useNavigate();
-  // HP decrease interval 1s. ** 후에 흙뿌리기랑 감안해서 속도 조정 
+  // HP decrease interval 1s. ** 후에 흙뿌리기랑 감안해서 속도 조정
   useInterval(
     () => {
       if (life <= 0) {
         // Game Over
         const score = playing.time;
-        navigate("/gameover", {state: score});
+        navigate("/gameover", { state: score });
         console.log(playing.time);
         resetPlaying();
 
         return;
       }
-      
+
       setLife(life - 1);
     },
     playing.isPlaying ? 1000 : null
@@ -68,13 +64,12 @@ const Game = () => {
   useInterval(
     () => {
       if (life > 0) {
-      setPlaying((prev) => {
-        
+        setPlaying((prev) => {
           const variable = { ...prev };
           variable.time += 1;
 
           return { ...variable };
-      });
+        });
       }
     },
     playing.isPlaying ? 1000 : null
@@ -93,20 +88,40 @@ const Game = () => {
 
   // Camera
   const [camera, setCamera] = useState({ pov: 90, position: [0, 10, 15] });
-  document.addEventListener("keydown", (event)=>{
-    const key = event.keyCode
+  document.addEventListener("keydown", (event) => {
+    const key = event.keyCode;
 
-    if (key === 38) { // Up
-      const newCamera = { pov: 20, position: [0, 60, 70] }
+    if (key === 38) {
+      // Up
+      const newCamera = { pov: 20, position: [0, 60, 70] };
       setCamera(newCamera);
-
-      
-    } else if (key === 40) { // Down
-        const newCamera = { pov: 90, position: [0, 10, 15] }
-        setCamera(newCamera);
+    } else if (key === 40) {
+      // Down
+      const newCamera = { pov: 90, position: [0, 10, 15] };
+      setCamera(newCamera);
     }
-})
-  
+  });
+
+  const cameraRef = useRef(null);
+  // Camera Recoil
+  function cameraEffect() {
+    console.log(cameraRef.current.position);
+
+    // const tween = new TWEEN.Tween(cameraRef.current.position)
+    //   .to([0, 60, 70], 1000)
+    //   .easing(TWEEN.Easing.Bounce.InOut)
+    //   .onUpdate(function () {
+    //     console.log(camera.current.position);
+    //     //cameraRef.current.position.set(cameraRef.current.position);
+    //   })
+    //   .onComplete(function () {
+    //     console.log(camera.current.position);
+    //     //cameraRef.current.position.set(0, 10, 15);
+    //   })
+    //   .start();
+    // tween.update(100);
+  }
+
   return (
     <GameWrapper id="game">
       <MainModal />
@@ -120,6 +135,7 @@ const Game = () => {
         {/* <OrbitControls /> */}
         <PerspectiveCamera
           makeDefault
+          ref={cameraRef}
           fov={camera.pov}
           position={camera.position}
           rotation={[(-40 / 180) * Math.PI, 0, 0]}
@@ -188,13 +204,13 @@ const Game = () => {
           />
         </Suspense>
       </Canvas>
-      <Attack/>
-      {/* {isAttack && (<Attack></Attack>)} */}
+      <Attack />
+      <button onClick={cameraEffect}>hello</button>
     </GameWrapper>
   );
 };
 
-// 
+//
 export default Game;
 
 const PlayInfoWrapper = styled.div`
@@ -206,6 +222,6 @@ const PlayInfoWrapper = styled.div`
 
 const GameWrapper = styled.div`
   width: 100%;
-  height:100vh;
+  height: 100vh;
   background-color: black;
-`
+`;
