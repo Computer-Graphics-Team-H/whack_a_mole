@@ -8,6 +8,7 @@ import Home from "./Home";
 import "./styles/index.css";
 import "semantic-ui-css/semantic.min.css";
 import GameOver from "./GameOver";
+import Example from "./Example";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -17,6 +18,7 @@ root.render(
         <Route path="*" element={<Home />} />
         <Route path="/game" element={<Game />} />
         <Route path="/gameover" element={<GameOver />} />
+        <Route path="/example" element={<Example />} />
       </Routes>
     </BrowserRouter>
   </RecoilRoot>

@@ -12,105 +12,103 @@ import React, { useEffect, useRef, useState } from "react";
 import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { ActiveHammer } from "./Cartoon_hammer";
-import Bonksrc from "./bonk_sound.mp3";
-import Laughtersrc from "./diglett_laughter.mp3";
 import { lifeState } from "../atom/Life";
 import { useSetRecoilState } from "recoil";
+import TWEEN from "@tweenjs/tween.js";
 
-var isUp = false; //false 상태면 올라오지 않음
-var isBonked = false; //true 상태면 올라오지 않음
+var pos = { x: 0, y: -4, z: 0 }; //두더지 위치
+var posY;
 
-var posY = -4;
-var IntervalId;
-var BonkLimitTimeout;
+var toZero = new TWEEN.Tween(pos)
+  .to({ x: 0, y: 0, z: 0 }, 500)
+  .easing(TWEEN.Easing.Elastic.Out)
+  .onUpdate(() => {
+    posY = pos.y;
+  });
+var toUnder = new TWEEN.Tween(pos)
+  .to({ x: 0, y: -4, z: 0 }, 100)
+  .easing(TWEEN.Easing.Quartic.Out)
+  .onUpdate(() => {
+    posY = pos.y;
+  });
 
-var isChanged = false; // 색이 바뀌었는지 
-var randColor = 2; // 두더지 종류
+var isUp = false; //올라와 있는지
+var BonkLimitTimeout; //망치에 맞지 않은 두더지가 들어가는 Timeout의 ID
+var randColor = Math.floor(Math.random() * 1000) % 3; // 두더지 종류
 
-const bonkSound = new Audio(Bonksrc);
-const laughSound = new Audio(Laughtersrc);
-
-function digIn(speed) {
-  //내려가는 애니메이션
-  posY = posY - 0.1 * speed;
-
-  if (posY <= -4) {
-    posY = -4;
-
-    if (!isChanged) {
-      randColor = Math.floor(Math.random() * 1000) % 3; //0,1,2 
-      isChanged = true;
-    }
-  }
+function digIn() {
+  toZero.stop();
+  toUnder
+    .onComplete(() => {
+      waiting();
+      isUp = false;
+    })
+    .start();
 }
 
 function digUp() {
-  if (!isBonked && !isUp && posY < 0) {
-    //망치를 맞은 직후도, 올라올 수 없는 상태도 아닌데 Y 좌표가 0 이하인 경우 상승
-    clearInterval(IntervalId);
-    posY += 0.1;
-  }
+  if (!isUp) {
+    // 올라와 있지 않은 경우에만 가능
+    toUnder.stop();
+    toZero
+      .onStart(() => {
+        randColor = Math.floor(Math.random() * 1000) % 3;
+      })
+      .onComplete(() => {
+        isUp = true;
 
-  if (posY >= 0) {
-    //Y 좌표가 0에 도달하면
-    posY = 0;
-    isUp = true;
-    isBonked = false;
-    isChanged = false;
-
-    BonkLimitTimeout = setTimeout(() => {
-      //2초가 지나도 맞지 않으면
-      if (!isBonked) {
-        laughSound.play();
-        digIn(2);
-        setTimeout(() => {
-          isUp = false;
-        }, 5000);
-        //score 계산 함수
-      }
-    }, 2000);
+        //2초가 지나도 맞지 않으면
+        BonkLimitTimeout = setTimeout(() => {
+          digIn();
+        }, 2000);
+      })
+      .start();
   }
 }
 
-function bonked() {
-  var randTime = Math.floor(Math.random() * 10000) + 3000; //다시 나오는 딜레이 3초~13초
-  bonkSound.currentTime = 0;
-
+function bonked(props) {
   if (isUp) {
-    isBonked = true;
-    IntervalId = setInterval(() => {
-      digIn(7);
-    }, 1);
+    digIn();
     ActiveHammer(0);
-    bonkSound.play();
+
+    //효과음
+    props.waveCamera();
+    props.playBonkSound();
+
+    //망치에 맞았으니 그냥 들어가는 대기 초기화
     clearTimeout(BonkLimitTimeout);
-    //score 계산 함수
-    setTimeout(() => {
-      isUp = false;
-      isBonked = false;
-    }, randTime);
-  } else {
-    //score 계산 함수
   }
+}
+
+function waiting() {
+  var randTime = Math.floor(Math.random() * 20000) + 5000; //다시 나오는 딜레이 5초~25초(5000~25000)
+
+  setTimeout(() => {
+    digUp();
+  }, randTime);
 }
 
 export default function Diglett(props) {
   const { nodes, materials } = useGLTF("model/diglett.glb");
   const group = useRef();
-  bonkSound.loop = false;
 
+  // 처음에 한번만 실행
   var randTime = Math.floor(Math.random() * 10000) + 1000;
+  useEffect(() => {
+    setTimeout(() => {
+      digUp();
+    }, randTime);
+  }, []);
 
   useFrame(() => {
     changeColor(colors[randColor]);
 
     group.current.position.y = posY;
-    setTimeout(() => {
-       digUp();
-    }, randTime);
+    if (toZero.isPlaying) toZero.update();
+    if (toUnder.isPlaying) toUnder.update();
   });
 
-  // 두더지 색 변경 
+  // 두더지 색 변경
   const colors = ["black", "yellow", "default"];
   const points = [-10, 10, 5];
 
@@ -118,32 +116,31 @@ export default function Diglett(props) {
   function changeColor(color) {
     switch (color) {
       case "black":
-        materials.Body00.color = { isColor: true, r: 0.2, g: 0.2, b: 0.2 }
-        materials.material.color = { isColor: true, r: 0.2, g: 0.2, b: 0.2 }
+        materials.Body00.color = { isColor: true, r: 0.2, g: 0.2, b: 0.2 };
+        materials.material.color = { isColor: true, r: 0.2, g: 0.2, b: 0.2 };
         break;
       case "yellow":
-        materials.Body00.color = { isColor: true, r: 1, g: 1, b: 0 }
-        materials.material.color = { isColor: true, r: 1, g: 1, b: 0 }
+        materials.Body00.color = { isColor: true, r: 1, g: 1, b: 0 };
+        materials.material.color = { isColor: true, r: 1, g: 1, b: 0 };
         break;
       default:
-        materials.Body00.color = { isColor: true, r: 1, g:1, b: 1}
-        materials.material.color = { isColor: true, r: 1, g: 1, b: 1 }
+        materials.Body00.color = { isColor: true, r: 1, g: 1, b: 1 };
+        materials.material.color = { isColor: true, r: 1, g: 1, b: 1 };
     }
     setMyMaterials(materials);
   }
 
-  // HP 바 반영 
+  // HP 바 반영
   const life = useSetRecoilState(lifeState);
   const onBonked = () => {
-    bonked();
+    bonked(props);
+
+    console.log("두더지 종류(black, yellow, default) - " + randColor);
     life((prev) => {
-      if (prev + points[randColor] >= 100)
-        return 100
-      else 
-        return prev + points[randColor]
+      if (prev + points[randColor] >= 100) return 100;
+      else return prev + points[randColor];
     });
   };
-
 
   return (
     <group
