@@ -1,5 +1,5 @@
 # Whack a mole
-Classic whack a mole game in 3D (2022-2 Computer Graphics Term project)
+2022-2 Computer Graphics Term project, 3D whack a mole game
 
 <p align="center">
 <img src="https://user-images.githubusercontent.com/87323603/200162898-cbdb6e9c-0bb9-4eda-93e9-41e5e8c9452f.png"/>
@@ -9,7 +9,9 @@ Classic whack a mole game in 3D (2022-2 Computer Graphics Term project)
 <br/>
 
 ## Preview
-...  
+<a href="https://youtu.be/kyPerkXCfik?t=455">
+  <img src="https://user-images.githubusercontent.com/87323603/200163538-09fe0c87-56ca-4b89-8db2-658fd992ca12.png" height="300px" />
+</a>
 <br/>
 
 ## Developer
